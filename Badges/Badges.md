@@ -118,7 +118,6 @@ Cloud Quest forced me to do exactly that.
 
 ## My Other AWS Resources
 
-- [AWS re/Start Portfolio](https://github.com/owen23-ux/AWS-reStart-Portfolio) – My main cloud learning repo
 - [Kali Linux SOC Lab](https://github.com/owen23-ux/SOC-Lab-Environment) – My security home lab
 
 ---
