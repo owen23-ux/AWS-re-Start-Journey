@@ -10,7 +10,9 @@ I completed Cloud Quest as part of my preparation for the **AWS Certified Cloud 
 
 ## 🏆 Certificate
 
-![AWS Cloud Quest Certificate](C:\Users\Owen23\Desktop\Certificates\AWS cloud-quest.png)
+![AWS Cloud Quest Certificate]
+<img width="533" height="345" alt="AWS cloud-quest" src="https://github.com/user-attachments/assets/7b0f9cf3-9368-480c-a3a3-b17e58c01b0a" />
+
 
 **Awarded to:** Owen Lethabo  
 **Completed:** May 03, 2026
