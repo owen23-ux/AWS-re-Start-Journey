@@ -10,7 +10,7 @@ I completed Cloud Quest as part of my preparation for the **AWS Certified Cloud 
 
 ## 🏆 Certificate
 
-![AWS Cloud Quest Certificate](blob:https://skillbuilder.aws/660ae7a3-f623-4d28-b67a-5485d17ed664)
+![AWS Cloud Quest Certificate](C:\Users\Owen23\Desktop\Certificates\AWS cloud-quest.png)
 
 **Awarded to:** Owen Lethabo  
 **Completed:** May 03, 2026
