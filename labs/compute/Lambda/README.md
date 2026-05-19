@@ -12,7 +12,7 @@ In this lab, I deployed and configured an AWS Lambda-based serverless computing 
 
 ## Architecture Diagram
 
-![Diagram](diagram2.png)
+![Diagram](ScreenShots/diagram2.png)
 
 *Figure 1: Architecture diagram showing the sales analysis report solution*
 
@@ -47,7 +47,7 @@ After completing this lab, I was able to:
 
 ### Function Configuration
 
-![Create Function](create-function5.png)
+![Create Function](ScreenShots/create-function5.png)
 
 *Figure 2: Creating the Lambda function*
 
@@ -62,7 +62,7 @@ After completing this lab, I was able to:
 
 ## Step 2: Configure IAM Execution Role
 
-![Execution Role](execution-role6.png)
+![Execution Role](ScreenShots/execution-role6.png)
 
 *Figure 3: Selecting the execution role*
 
@@ -83,13 +83,13 @@ The IAM role provides:
 
 ### Layer Creation
 
-![Create Layer](Creating-layer4.png)
+![Create Layer](ScreenShots/Creating-layer4.png)
 
 *Figure 4: Creating the PyMySQL library layer*
 
 ### Layer Selection
 
-![Add Layer](add-layers7.png)
+![Add Layer](ScreenShots/add-layers7.png)
 
 *Figure 5: Adding the custom layer to the function*
 
@@ -106,7 +106,7 @@ The IAM role provides:
 
 ## Step 4: Upload Function Code
 
-![Upload Code](upload9.png)
+![Upload Code](ScreenShots/upload9.png)
 
 *Figure 6: Uploading the function code package*
 
@@ -119,7 +119,7 @@ The IAM role provides:
 
 ## Step 5: Configure Runtime Settings
 
-![Runtime Settings](run-time8.png)
+![Runtime Settings](ScreenShots/run-time8.png)
 
 *Figure 7: Runtime settings configuration*
 
@@ -133,13 +133,13 @@ The IAM role provides:
 
 ## Step 6: Configure VPC for Database Access
 
-![Edit VPC](edit-vpc11.png)
+![Edit VPC](ScreenShots/edit-vpc11.png)
 
 *Figure 8: VPC configuration*
 
 ### Security Group
 
-![VPC Security Group](vpc-group12.png)
+![VPC Security Group](ScreenShots/vpc-group12.png)
 
 *Figure 9: Security group selection*
 
@@ -155,7 +155,7 @@ The IAM role provides:
 
 ## Step 7: Lambda Function Code
 
-![Code Source](code-source10.png)
+![Code Source](ScreenShots/code-source10.png)
 
 *Figure 10: Lambda function Python code*
 
