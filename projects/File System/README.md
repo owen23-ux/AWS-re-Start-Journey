@@ -132,3 +132,13 @@ I created the third mount target in Availability Zone us-east-1c.
 On each EC2 instance, I ran:
 ```bash
 sudo yum install -y amazon-efs-utils
+---
+
+### Step 10: Created Mount Directory and Mounted EFS
+
+[*Figure 11: Installing amazon-efs-utils on EC2 instance*](https://screenshots/mdksir-i9.png
+# Create mount directory
+mkdir data
+
+# Mount EFS
+sudo mount -t efs fs-0aa83cff0bbddc:/ data
