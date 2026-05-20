@@ -134,9 +134,17 @@ On each EC2 instance, I ran:
 sudo yum install -y amazon-efs-utils
 ---
 
+## Step 10-12: Mount EFS, Create Test Files, and Verify Shared Storage
+
+![Terminal Log](screenshots/mdksir-i9.png)
+
+*Figure 10: Mounting EFS, creating test files, and verifying shared storage*
+
 ### Step 10: Created Mount Directory and Mounted EFS
 
-[*Figure 11: Installing amazon-efs-utils on EC2 instance*](https://screenshots/mdksir-i9.png
+On each EC2 instance, I ran:
+
+```bash
 # Create mount directory
 mkdir data
 
