@@ -8,7 +8,7 @@
 
 **AWS SimuLearn Certificate**
 
-![AWS SimuLearn: Networking Concepts completion certificate](certificate.png)
+![AWS SimuLearn: Networking Concepts completion certificate](Owen.pdf)
 
 **Awarded to:** Owen Lethabo
 
