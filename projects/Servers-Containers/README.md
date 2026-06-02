@@ -1,278 +1,237 @@
-# 🏅 Certs & Badges
+# AWS Lambda Lab – Serverless Sales Analysis Report Solution
 
-> Tracking certification progress, simulearns, and badges earned on my AWS cloud learning journey.
+## Lab Overview
 
----
+In this lab, I deployed and configured an AWS Lambda-based serverless computing solution that generates a sales analysis report by pulling data from a database and emailing the results daily. The Lambda function is triggered by an Amazon CloudWatch Events rule at 8 PM every day (Monday through Saturday).
 
-## 📊 Progress Summary
+**Date Completed:** May 13, 2026
 
-| Simulearn | Status | Started | Completed | Badge |
-|-----------|--------|---------|-----------|-------|
-| 1 – Cloud Foundations | ✅ Completed | May 15, 2026 | May 18, 2026 | 🏅 Earned |
-| 2 – File Systems in the Cloud | ✅ Completed | May 19, 2026 | May 20, 2026 | 🏅 Earned |
-| 3 – Networking Concepts | ✅ Completed | June 01, 2026 | June 02, 2026 | 🏅 Earned |
+**Author:** Owen Maake – AWS re/Start Participant | Aspiring SOC Analyst
 
-**Total Badges Earned: 3 / 3**
+## What is AWS Lambda?
 
----
+AWS Lambda is a serverless, event-driven compute service that lets you run code for virtually any type of application or backend service without provisioning or managing servers. You only pay for the compute time you consume.
 
-## 🎓 Simulearns
+| Feature | Benefit |
+| :--- | :--- |
+| **Serverless** | No infrastructure to manage |
+| **Event-driven** | Responds to triggers from 200+ AWS services |
+| **Automatic scaling** | Scales from zero to thousands of concurrent executions |
+| **Pay-per-use** | Only charged for actual compute time |
 
-### Simulearn 1 – Cloud Foundations
+## Lab Architecture
 
-| Status | Started | Completed |
-|--------|---------|-----------|
-| ✅ Completed | May 15, 2026 | May 18, 2026 |
+![Architecture Diagram](Lambda/ScreenShots/diagram2.png)
 
-<details>
-<summary><strong>Topics Covered</strong></summary>
+*Figure 1: Complete architecture of the sales analysis report solution.*
 
-| Topic | What I Learned |
-|-------|----------------|
-| AWS Global Infrastructure | Regions, Availability Zones, Edge Locations |
-| Compute Services | EC2 instance types, AMIs, instance lifecycle |
-| Storage Services | S3 storage classes, EBS volumes, object vs block storage |
-| Database Services | RDS, DynamoDB, Aurora comparisons |
-| Networking | VPC basics, subnets, security groups |
-| IAM | Users, groups, roles, policies, MFA |
-| Pricing Models | On-Demand, Reserved, Spot, Savings Plans |
-| Shared Responsibility Model | AWS vs customer security responsibilities |
+The diagram above shows the complete workflow:
 
-</details>
+| Step | Description |
+| :--- | :--- |
+| **1** | Amazon CloudWatch Events triggers `salesAnalysisReport` Lambda function at 8 PM daily (Monday–Saturday) |
+| **2** | `salesAnalysisReport` invokes `salesAnalysisReportDataExtractor` Lambda function |
+| **3** | `salesAnalysisReportDataExtractor` runs analytical query against `cafe_db` (MariaDB/MySQL) |
+| **4** | Query results returned to `salesAnalysisReport` function |
+| **5** | `salesAnalysisReport` formats report and publishes to `salesAnalysisReportTopic` SNS topic |
+| **6** | SNS topic sends report by email to administrator |
 
-<details>
-<summary><strong>Key Takeaways</strong></summary>
+![Lab Objectives](Lambda/ScreenShots/steps-objectives3.png)
 
-| Takeaway | Why It Matters |
-|----------|----------------|
-| Choose region based on latency, cost, and compliance | Affects performance and legal requirements |
-| IAM least privilege principle | Only grant necessary permissions to reduce risk |
-| EC2 stop vs terminate | Stopped instances retain EBS volumes, terminated do not |
-| S3 is 11 nines durable | Designed for 99.999999999% durability |
-| Security groups are stateful | No need for separate inbound/outbound rules for return traffic |
+*Figure 2: Lab objectives and step-by-step workflow details.*
 
-</details>
+## What I Did – Step by Step
 
-🏅 **Badge Earned:** AWS Cloud Foundations — Issued May 18, 2026
+### Part 1: Created the Lambda Function
 
----
+#### Step 1: Created the Lambda Function from Scratch
 
-### Simulearn 2 – File Systems in the Cloud
+![Create Function](Lambda/ScreenShots/create-function5.png)
 
-| Status | Started | Completed |
-|--------|---------|-----------|
-| ✅ Completed | May 19, 2026 | May 20, 2026 |
+*Figure 3: Creating the Lambda function "salesAnalysisReportDataExtractor".*
 
-<details>
-<summary><strong>Topics Covered</strong></summary>
+I created a new Lambda function with the following configuration:
+- **Function name:** `salesAnalysisReportDataExtractor`
+- **Runtime:** Python 3.14
+- **Architecture:** ARM64 (optimized for better price/performance)
 
-| Topic | What I Learned |
-|-------|----------------|
-| Amazon EFS | Serverless, elastic file system for Linux workloads |
-| EFS Storage Classes | Standard, Infrequent Access (IA), Archive |
-| Mount Targets | NFSv4 endpoints in each Availability Zone |
-| Security Groups | NFS port 2049 inbound rules |
-| EFS vs EBS | Shared vs block storage, multi-AZ vs single AZ |
-| amazon-efs-utils | AWS utilities for easier EFS mounting |
-| Lifecycle Management | Automatically move files between storage classes |
-| Performance Modes | General Purpose vs Max I/O |
-| Throughput Modes | Bursting vs Provisioned |
+#### Step 2: Configured the Execution Role
 
-</details>
+![Execution Role](Lambda/ScreenShots/execution-role6.png)
 
-<details>
-<summary><strong>Key Takeaways</strong></summary>
+*Figure 4: Configuring the custom execution role.*
 
-| Takeaway | Why It Matters |
-|----------|----------------|
-| EFS is shared storage | Multiple EC2 instances across AZs can access same files |
-| EFS grows automatically | No need to provision capacity in advance |
-| Mount targets per AZ | Each AZ needs its own mount target for EC2 access |
-| Security is critical | NFS port 2049 must be restricted to trusted sources |
-| amazon-efs-utils simplifies mounting | `mount -t efs` instead of standard NFS commands |
+I selected the existing execution role `salesAnalysisReportDERole` which had the necessary permissions for the Lambda function to access other AWS services.
 
-</details>
+### Part 2: Created and Configured the Lambda Layer
 
-<details>
-<summary><strong>What I Did</strong></summary>
+#### Step 3: Created a Custom Lambda Layer
 
-- Created an EFS file system
-- Configured mount targets across three Availability Zones
-- Set up security groups with NFS inbound rules
-- Installed `amazon-efs-utils` on EC2 instances
-- Mounted EFS to multiple EC2 instances
-- Verified shared storage across all instances
-
-</details>
-
-<details>
-<summary><strong>Commands Used</strong></summary>
-
-```bash
-# Install EFS utilities
-sudo yum install -y amazon-efs-utils
-
-# Create mount directory
-mkdir /data
+![Create Layer](Lambda/ScreenShots/Creating-layer4.png)
 
-# Mount EFS
-sudo mount -t efs fs-xxxxxxxxxxxxx:/ /data
+*Figure 5: Creating the pymysqlLibrary layer.*
 
-# Verify mount
-df -h | grep efs
+Since the Lambda function needed to connect to a MySQL/MariaDB database, I created a custom layer containing the `pymysql` library:
 
-# Create test file
-sudo bash -c "echo 'Shared test content' > /data/test-file.log"
+- **Name:** `pymysqlLibrary`
+- **Description:** PyMySQL library modules
+- **Upload:** `pymysql-v3.zip` (105.45 KB)
 
-# Verify on second instance
-cat /data/test-file.log
-```
+#### Step 4: Added the Layer to the Function
 
-</details>
+![Add Layer](Lambda/ScreenShots/add-layers7.png)
 
-🏅 **Badge Earned:** AWS File Systems — Issued May 20, 2026
+*Figure 6: Adding the pymysqlLibrary layer to the function.*
 
----
+I added the custom layer with:
+- **Layer:** `pymysqlLibrary`
+- **Version:** 1
+- **Compatible runtime:** Python 3.14
+- **Compatible architecture:** arm64
 
-### Simulearn 3 – Networking Concepts
+### Part 3: Uploaded Function Code and Configured Runtime
 
-| Status | Started | Completed |
-|--------|---------|-----------|
-| ✅ Completed | June 01, 2026 | June 02, 2026 |
+#### Step 5: Uploaded the Function Code
 
-> **Certificate Issued by:** Michelle Vaz, Director, AWS Training & Certification  
-> **Awarded to:** Owen Lethabo
+![Upload Code](Lambda/ScreenShots/upload9.png)
 
-<details>
-<summary><strong>Topics Covered</strong></summary>
+*Figure 7: Uploading the function code from a .zip file.*
 
-| Topic | What I Learned |
-|-------|----------------|
-| Virtual Private Cloud (VPC) | Logically isolated network in AWS |
-| Public Subnets | Subnets with route to Internet Gateway (`10.10.0.0/24`) |
-| Private Subnets | Subnets without Internet Gateway access (`10.10.2.0/24`) |
-| Internet Gateway | Enables internet access for public subnets |
-| Route Tables | Control traffic flow between subnets and internet |
-| Security Groups | Stateful firewalls controlling inbound/outbound traffic |
-| Inbound Rules | Control incoming traffic (HTTP port 80, MySQL port 3306) |
-| Outbound Rules | Control outgoing traffic from instances |
-| MySQL/Aurora Port 3306 | Database port requiring explicit security group rules |
-| Connection Validation | Testing cross-subnet connectivity on specific ports |
-| `0.0.0.0/0` CIDR | Allows all IP addresses (not recommended for production) |
+I uploaded the `salesAnalysisReportDataExtractor-v3.zip` file containing the Python code for the Lambda function.
 
-</details>
+#### Step 6: Configured Runtime Settings
 
-<details>
-<summary><strong>Key Takeaways</strong></summary>
+![Runtime Settings](Lambda/ScreenShots/run-time8.png)
 
-| Takeaway | Why It Matters |
-|----------|----------------|
-| Security groups are stateful | Inbound allow automatically permits return outbound traffic |
-| Port 3306 must be explicitly allowed | DB server needs inbound rule from web server subnet |
-| Restrict source CIDRs | Use specific subnets instead of `0.0.0.0/0` |
-| Route tables determine subnet type | Public subnets have IGW route, private subnets do not |
-| Connection timeout = missing rule | Security group or route table issue |
-| Web server needs outbound to DB | Outbound rule on port 3306 to DB subnet |
-| DB server needs inbound from web | Inbound rule on port 3306 from web subnet |
+*Figure 8: Verifying runtime settings and handler configuration.*
 
-</details>
+The runtime settings were configured as:
+- **Runtime:** Python 3.14
+- **Handler:** `salesAnalysisReportDataExtractor.lambda_handler`
+- **Architecture:** arm64
 
-<details>
-<summary><strong>What I Did</strong></summary>
+#### Step 7: Verified the Code Source
 
-- Created a VPC with CIDR block `10.10.0.0/16`
-- Created public subnet (`10.10.0.0/24`) for web server
-- Created private subnet (`10.10.2.0/24`) for database server
-- Attached Internet Gateway to VPC
-- Configured public route table with `0.0.0.0/0 → IGW`
-- Associated public route table with web server subnet
-- Configured Web Server Security Group inbound rule: HTTP port 80 from `0.0.0.0/0`
-- Configured DB Server Security Group inbound rule: MySQL port 3306 from web subnet (`10.10.0.0/24`)
-- Configured Web Server Security Group outbound rule: MySQL port 3306 to DB subnet (`10.10.2.0/24`)
-- Verified connectivity between web server and database server
-- Troubleshot connection timeout errors by adjusting security group rules
+![Code Source](Lambda/ScreenShots/code-source10.png)
 
-</details>
+*Figure 9: The Lambda function code showing database connection logic.*
 
-<details>
-<summary><strong>Security Group Rules Configured</strong></summary>
+The Python code imports:
+- `boto3` – AWS SDK for Python
+- `pymysql` – MySQL database connector
+- `sys` – System-specific parameters
 
-| Security Group | Type | Protocol | Port | Source / Destination |
-|----------------|------|----------|------|----------------------|
-| WebServerSecurityGroup | HTTP (Inbound) | TCP | 80 | `0.0.0.0/0` |
-| WebServerSecurityGroup | MySQL/Aurora (Outbound) | TCP | 3306 | `10.10.2.0/24` |
-| DBServerSecurityGroup | MySQL/Aurora (Inbound) | TCP | 3306 | `10.10.0.0/24` |
+The `lambda_handler` function:
+1. Retrieves database connection info from the event parameter (`dbUrl`, `dbName`, `dbUser`, `dbPassword`)
+2. Establishes a connection to the Cafe database
+3. Sets up the cursor to return results
 
-</details>
+### Part 4: Configured VPC for Database Access
 
-<details>
-<summary><strong>Route Table Configuration</strong></summary>
+#### Step 8: Edited VPC Configuration
 
-| Destination | Target | Status | Purpose |
-|-------------|--------|--------|---------|
-| `10.10.0.0/16` | local | Active | Internal VPC routing |
-| `0.0.0.0/0` | `igw-0b13fa1473373ea51` | Active | Internet access for public subnet |
+![Edit VPC](Lambda/ScreenShots/edit-vpc11.png)
 
-</details>
+*Figure 10: Configuring VPC settings to allow database access.*
 
-<details>
-<summary><strong>Commands Used</strong></summary>
+I configured the VPC settings so the Lambda function could access the Cafe database running on an EC2 instance:
+- **VPC:** `vpc-0d418a464cc5eb146 (10.200.0.0/20)`
+- **Subnet:** `subnet-0f43fa29fab10fb07 (10.200.0.0/24)` – Cafe Public Subnet 1
 
-```bash
-# Verify security group rules (AWS CLI)
-aws ec2 describe-security-groups --group-ids sg-099a7817b4e1b6ece
+#### Step 9: Configured Security Group
 
-# Test connectivity from web server
-telnet 10.10.2.10 3306
+![Security Group](Lambda/ScreenShots/vpc-group12.png)
 
-# Check route table associations
-aws ec2 describe-route-tables --route-table-ids rtb-0e07bee7158ed107d
+*Figure 11: Selecting the security group for VPC configuration.*
 
-# View instances in each subnet
-aws ec2 describe-instances --filters "Name=vpc-id,Values=vpc-00a4c61dd6723a268"
-```
+I selected the `CafeSecurityGroup` which allows the Lambda function to communicate with the Cafe EC2 instance running the MariaDB database.
 
-</details>
+### Part 5: Configured AWS CLI on EC2 (Database Setup)
 
-🏅 **Badge Earned:** AWS Networking Concepts — Issued June 02, 2026
+#### Step 10: Configured AWS Credentials
 
----
+![AWS Configure](Lambda/ScreenShots/aws-configure17.png)
 
-## 🎖️ Earned Badges
+*Figure 12: Configuring AWS CLI on the EC2 instance.*
 
-| Badge | Date Earned | Issuer |
-|-------|-------------|--------|
-| 🏅 AWS Cloud Foundations | May 18, 2026 | AWS Training & Certification |
-| 🏅 AWS File Systems | May 20, 2026 | AWS Training & Certification |
-| 🏅 AWS Networking Concepts | June 02, 2026 | AWS Training & Certification |
+I configured the AWS CLI on the Cafe EC2 instance with the necessary access keys:
+- **AWS Access Key ID:** Provided by the lab environment
+- **AWS Secret Access Key:** Provided by the lab environment
+- **Default region:** `us-west-2`
+- **Default output format:** `json`
 
----
+### Part 6: Created SNS Topic and Subscription
 
-## 📜 Completion Certificates
+#### Step 11: Created SNS Topic
 
-| Course | Awarded To | Date Completed | Issued By |
-|--------|------------|----------------|-----------|
-| Simulearn 1 – Cloud Foundations | Owen Lethabo | May 18, 2026 | AWS Training & Certification |
-| Simulearn 2 – File Systems in the Cloud | Owen Lethabo | May 20, 2026 | AWS Training & Certification |
-| Simulearn 3 – Networking Concepts | Owen Lethabo | June 02, 2026 | Michelle Vaz, Director, AWS T&C |
+![Create Topic](Lambda/ScreenShots/create-topic15.png)
 
----
+*Figure 13: Creating the SNS topic for email notifications.*
 
-## 🔗 Course Links
+I created an SNS topic with:
+- **Type:** Standard
+- **Name:** `salesAnalysisReportTopic`
+- **Display name:** `SARTopic`
 
-| Simulearn | Link |
-|-----------|------|
-| Simulearn 1 – Cloud Foundations | [Access Course](https://aws.amazon.com/training/digital/aws-simulearn/) |
-| Simulearn 2 – File Systems in the Cloud | [Access Course](https://www.classcentral.com/course/aws-simulearn-file-systems-in-the-cloud-299068) |
-| Simulearn 3 – Networking Concepts | [Access Course](https://aws.amazon.com/training/digital/aws-simulearn/) |
+#### Step 12: Created Email Subscription
 
----
+![Create Subscription](Lambda/ScreenShots/subscription16.png)
 
-## 🗺️ What's Next
+*Figure 14: Creating an email subscription to receive report notifications.*
 
-- [ ] Simulearn 4 – Security Best Practices *(Coming Soon)*
-- [ ] Simulearn 5 – Database Services *(Coming Soon)*
+I added an email subscription:
+- **Protocol:** Email
+- **Endpoint:** `owenlethabo28@gmail.com`
 
----
+> **Note:** The subscription requires confirmation via email before receiving notifications.
 
-*Last updated: June 02, 2026*
+### Part 7: Created and Executed Test Event
+
+#### Step 13: Created Test Event
+
+![Create Test Event](Lambda/ScreenShots/create-test-event14.png)
+
+*Figure 15: Creating a test event to validate the Lambda function.*
+
+I created a test event named `SARDETestEvent` with:
+- **Invocation type:** Synchronous (waits for response)
+- **Event sharing:** Private
+
+The test event simulated the database connection parameters that would normally come from the parent Lambda function.
+
+## Lab Validation
+
+![Lab Overview](Lambda/ScreenShots/intro1.png)
+
+*Figure 16: Lab introduction – Working with AWS Lambda.*
+
+The complete solution was successfully deployed and tested. The Lambda function is now ready to be triggered daily at 8 PM (Monday–Saturday) by CloudWatch Events, generating and emailing sales analysis reports automatically.
+
+## Key Takeaways
+
+1.  **Lambda Layers** – External libraries (like `pymysql`) should be packaged as Lambda layers for reusability and easier code management.
+
+2.  **VPC Configuration** – Lambda functions must be connected to a VPC to access resources (like RDS or EC2 databases) inside private subnets.
+
+3.  **Execution Roles** – Lambda functions require IAM roles with appropriate permissions to access other AWS services (CloudWatch, SNS, Systems Manager Parameter Store).
+
+4.  **SNS Integration** – Lambda functions can publish messages to SNS topics, which then deliver notifications via email, SMS, or other protocols.
+
+5.  **Event-Driven Architecture** – CloudWatch Events (now Amazon EventBridge) can trigger Lambda functions on a schedule, enabling automated reporting workflows.
+
+## Troubleshooting Tips
+
+| Issue | Common Cause | Solution |
+| :--- | :--- | :--- |
+| **Connection timeout** | Lambda not in correct VPC/subnet | Verify VPC and subnet configuration |
+| **Module not found error** | Layer missing or incompatible | Check layer runtime compatibility and architecture |
+| **Access denied errors** | IAM role missing permissions | Review and update execution role policies |
+| **Database connection failed** | Security group blocking traffic | Ensure security group allows MySQL (port 3306) from Lambda |
+
+## Next Steps
+
+- Add error handling and dead-letter queues (DLQ) for failed invocations
+- Implement AWS X-Ray tracing for performance monitoring
+- Store database credentials in AWS Secrets Manager instead of passing via event
+- Add CloudWatch alarms for function errors and throttles
+- Extend the solution to support additional report formats (CSV, PDF)
