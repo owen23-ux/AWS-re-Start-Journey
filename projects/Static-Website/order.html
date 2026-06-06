@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Online | Harvest Table Restaurant</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">Harvest Table</a>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="booking.html">Bookings</a>
+      <a href="order.html">Order</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+    <a class="button" href="booking.html">Reserve</a>
+  </header>
+
+  <main>
+    <section class="page-hero order-hero">
+      <p class="eyebrow">Online ordering</p>
+      <h1>Place a meal order</h1>
+      <p>Select dishes, confirm quantities, and send your order to the kitchen queue.</p>
+    </section>
+
+    <section class="booking-order single-panel">
+      <form class="panel" id="orderForm">
+        <h2>Place an order</h2>
+        <ul class="order-items" id="orderItems"></ul>
+
+        <div class="form-grid">
+          <label>
+            Customer name
+            <input name="customer" type="text" placeholder="Your name" required>
+          </label>
+          <label>
+            Phone
+            <input name="phone" type="tel" placeholder="071 234 5678" required>
+          </label>
+          <label class="full">
+            Collection option
+            <select name="collection" required>
+              <option value="">Choose an option</option>
+              <option>Pickup</option>
+              <option>Eat in</option>
+            </select>
+          </label>
+          <label>
+            Payment method
+            <select name="paymentMethod" required>
+              <option value="">Choose payment method</option>
+              <option>EFT bank transfer</option>
+              <option>Card payment link</option>
+              <option>Pay on collection</option>
+            </select>
+          </label>
+          <label>
+            Payment reference
+            <input name="paymentReference" type="text" placeholder="Reference or pending">
+          </label>
+          <label class="full checkbox-label">
+            <input name="paymentPolicy" type="checkbox" required>
+            I understand that unpaid orders may only be prepared after confirmation.
+          </label>
+        </div>
+
+        <div class="total">
+          <span>Order total</span>
+          <span id="orderTotal">R240</span>
+        </div>
+        <button type="submit">Send order</button>
+        <p class="status" id="orderStatus" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>Harvest Table Restaurant</span>
+    <span>123 Market Street, open 10:00 to 22:00</span>
+  </footer>
+
+  <script src="menu-data.js"></script>
+  <script src="global.js"></script>
+</body>
+</html>

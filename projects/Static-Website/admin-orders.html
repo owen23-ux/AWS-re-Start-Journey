@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Orders | Harvest Table Restaurant</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">Harvest Table</a>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="booking.html">Bookings</a>
+      <a href="order.html">Order</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+    <a class="button" href="admin.html">Admin</a>
+  </header>
+
+  <main>
+    <section class="page-hero admin-page-hero">
+      <p class="eyebrow">Admin orders</p>
+      <h1>Order queue</h1>
+      <p>Confirm orders when payment and preparation details are ready.</p>
+    </section>
+
+    <section class="admin admin-protected hidden" id="adminProtected">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Kitchen queue</p>
+          <h2>Orders</h2>
+        </div>
+        <p>Pending customer meal orders.</p>
+      </div>
+      <div class="admin-list" id="adminOrdersList">
+        <article class="admin-record">
+          <div>
+            <h3>Order #1001</h3>
+            <p>Thandi Mokoena, 071 234 5678</p>
+            <p>1 Harvest Salad, 2 Herb Pasta. Payment reference: EFT-1001.</p>
+          </div>
+          <span class="record-status">Pending</span>
+          <button type="button" class="confirm-button">Confirm</button>
+        </article>
+        <article class="admin-record">
+          <div>
+            <h3>Order #1002</h3>
+            <p>James Naidoo, 082 111 4455</p>
+            <p>2 Flame Grilled Chicken. Payment reference: pending.</p>
+          </div>
+          <span class="record-status">Pending</span>
+          <button type="button" class="confirm-button">Confirm</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="admin-login-section hidden" id="adminAccessMessage">
+      <div class="panel">
+        <h2>Admin login required</h2>
+        <p>Please log in before viewing the order queue.</p>
+        <a class="button" href="admin.html">Go to login</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>Harvest Table Restaurant</span>
+    <span>123 Market Street, open 10:00 to 22:00</span>
+  </footer>
+
+  <script src="global.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | Harvest Table Restaurant</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">Harvest Table</a>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="booking.html">Bookings</a>
+      <a href="order.html">Order</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+    <a class="button" href="booking.html">Reserve</a>
+  </header>
+
+  <main>
+    <section class="page-hero admin-page-hero">
+      <p class="eyebrow">Restaurant admin</p>
+      <h1>Admin login</h1>
+      <p>Sign in to view bookings, kitchen orders, and available tables.</p>
+    </section>
+
+    <section class="admin-login-section" id="adminLoginSection">
+      <form class="panel admin-login" id="adminLoginForm">
+        <h2>Admin sign in</h2>
+        <div class="form-grid">
+          <label class="full">
+            Email
+            <input name="email" type="email" placeholder="admin@harvest.com" required>
+          </label>
+          <label class="full">
+            Password
+            <input name="password" type="password" placeholder="Password" required>
+          </label>
+        </div>
+        <button type="submit">Log in</button>
+        <p class="status error-status" id="adminLoginStatus" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="admin hidden" id="adminDashboard">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Today</p>
+          <h2>Admin dashboard</h2>
+        </div>
+        <p>Choose which queue you want to manage.</p>
+      </div>
+      <div class="section-actions admin-actions">
+        <button type="button" id="adminLogoutButton">Log out</button>
+      </div>
+      <div class="admin-grid">
+        <a class="admin-tile" href="admin-orders.html">
+          <strong>Orders</strong>
+          <span>View meal orders and confirm kitchen processing.</span>
+        </a>
+        <a class="admin-tile" href="admin-bookings.html">
+          <strong>Bookings</strong>
+          <span>View table reservations and confirm guest bookings.</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>Harvest Table Restaurant</span>
+    <span>123 Market Street, open 10:00 to 22:00</span>
+  </footer>
+
+  <script src="global.js"></script>
+</body>
+</html>

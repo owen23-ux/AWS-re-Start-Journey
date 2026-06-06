@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Bookings | Harvest Table Restaurant</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">Harvest Table</a>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="booking.html">Bookings</a>
+      <a href="order.html">Order</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+    <a class="button" href="admin.html">Admin</a>
+  </header>
+
+  <main>
+    <section class="page-hero admin-page-hero">
+      <p class="eyebrow">Admin bookings</p>
+      <h1>Booking queue</h1>
+      <p>Confirm reservations after checking deposit and table availability.</p>
+    </section>
+
+    <section class="admin admin-protected hidden" id="adminProtected">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Reservations</p>
+          <h2>Bookings</h2>
+        </div>
+        <p>Pending table booking requests.</p>
+      </div>
+      <div class="admin-list" id="adminBookingsList">
+        <article class="admin-record">
+          <div>
+            <h3>Booking #501</h3>
+            <p>Lerato Dube, 073 222 8899</p>
+            <p>4 guests, patio, 19:00. Deposit reference: DEP-501.</p>
+          </div>
+          <span class="record-status">Pending</span>
+          <button type="button" class="confirm-button">Confirm</button>
+        </article>
+        <article class="admin-record">
+          <div>
+            <h3>Booking #502</h3>
+            <p>Michael Adams, 084 900 1200</p>
+            <p>2 guests, window table, 18:30. Deposit reference: pending.</p>
+          </div>
+          <span class="record-status">Pending</span>
+          <button type="button" class="confirm-button">Confirm</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="admin-login-section hidden" id="adminAccessMessage">
+      <div class="panel">
+        <h2>Admin login required</h2>
+        <p>Please log in before viewing the booking queue.</p>
+        <a class="button" href="admin.html">Go to login</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>Harvest Table Restaurant</span>
+    <span>123 Market Street, open 10:00 to 22:00</span>
+  </footer>
+
+  <script src="global.js"></script>
+</body>
+</html>

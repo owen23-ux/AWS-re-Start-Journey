@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookings | Harvest Table Restaurant</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">Harvest Table</a>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="booking.html">Bookings</a>
+      <a href="order.html">Order</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+    <a class="button" href="booking.html">Reserve</a>
+  </header>
+
+  <main>
+    <section class="page-hero booking-hero">
+      <p class="eyebrow">Reserve a table</p>
+      <h1>Table bookings</h1>
+      <p>Choose your date, time, seating preference, and guest count. Meal orders are handled separately.</p>
+    </section>
+
+    <section class="booking-order single-panel">
+      <form class="panel" id="bookingForm">
+        <h2>Book a table</h2>
+        <div class="form-grid">
+          <label>
+            Name
+            <input name="name" type="text" placeholder="Your name" required>
+          </label>
+          <label>
+            Phone
+            <input name="phone" type="tel" placeholder="071 234 5678" required>
+          </label>
+          <label>
+            Date
+            <input name="date" type="date" required>
+          </label>
+          <label>
+            Time
+            <input name="time" type="time" required>
+          </label>
+          <label>
+            Guests
+            <select name="guests" required>
+              <option value="">Select guests</option>
+              <option>2 guests</option>
+              <option>4 guests</option>
+              <option>6 guests</option>
+              <option>8 guests</option>
+            </select>
+          </label>
+          <label>
+            Seating
+            <select name="seating">
+              <option>Indoor</option>
+              <option>Patio</option>
+              <option>Window table</option>
+            </select>
+          </label>
+          <label class="full">
+            Notes
+            <textarea name="notes" placeholder="Dietary needs or special occasion"></textarea>
+          </label>
+          <label>
+            Deposit method
+            <select name="depositMethod" required>
+              <option value="">Choose payment method</option>
+              <option>EFT bank transfer</option>
+              <option>Card payment link</option>
+              <option>Pay at restaurant</option>
+            </select>
+          </label>
+          <label>
+            Payment reference
+            <input name="paymentReference" type="text" placeholder="Reference or pending">
+          </label>
+          <label class="full checkbox-label">
+            <input name="depositPolicy" type="checkbox" required>
+            I understand that a deposit may be required to secure this booking.
+          </label>
+        </div>
+        <button type="submit">Confirm booking</button>
+        <p class="status" id="bookingStatus" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>Harvest Table Restaurant</span>
+    <span>123 Market Street, open 10:00 to 22:00</span>
+  </footer>
+
+  <script src="global.js"></script>
+</body>
+</html>

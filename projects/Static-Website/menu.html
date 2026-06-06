@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu | Harvest Table Restaurant</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">Harvest Table</a>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="booking.html">Bookings</a>
+      <a href="order.html">Order</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+    <a class="button" href="booking.html">Reserve</a>
+  </header>
+
+  <main>
+    <section class="page-hero menu-hero">
+      <p class="eyebrow">Popular orders</p>
+      <h1>Today&apos;s menu</h1>
+      <p>Choose guest favourites for pickup or table service.</p>
+    </section>
+
+    <section>
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Fresh from the kitchen</p>
+          <h2>Guest favourites</h2>
+        </div>
+        <p>Simple local meals with clear prices for online ordering.</p>
+      </div>
+
+      <div class="menu-grid" id="menuList" aria-label="Restaurant menu"></div>
+      <div class="section-actions">
+        <a class="button" href="order.html">Start order</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>Harvest Table Restaurant</span>
+    <span>123 Market Street, open 10:00 to 22:00</span>
+  </footer>
+
+  <script src="menu-data.js"></script>
+  <script src="global.js"></script>
+</body>
+</html>
