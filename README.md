@@ -18,4 +18,4 @@ Documentation & GitHub	Evidence of skills for CV	Proves I understand security co
 
 The Key Difference: Most SOC analysts focus only on on-premises security. I am learning cloud security fundamentals that 90% of companies now need.
 
-##STAY WITH ME I WILL BE UPDATING MY PROJECTS
+## STAY WITH ME I WILL BE UPDATING MY PROJECTS
