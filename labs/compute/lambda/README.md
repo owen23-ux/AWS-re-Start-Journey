@@ -1,5 +1,275 @@
 # 🖥️ AWS EC2: Elastic Compute Cloud Deep Dive
 
+**Date Completed**: May 13, 2026
+**Service**: Amazon EC2 (Virtual Servers in the Cloud)
+**Environment**: AWS us-west-2 (Oregon)
+
+---
+
+## What I Learned
+
+### 1. What Amazon EC2 Is
+
+Amazon EC2 (Elastic Compute Cloud) is an AWS service that allows users to create and manage virtual servers in the cloud. It provides scalable computing capacity without needing to buy or manage physical hardware.
+
+**Common Uses of EC2**
+
+- Hosting web applications
+- Running Linux servers
+- Backend APIs
+- Databases
+- Cloud labs and testing
+- DevOps environments
+- Security testing environments
+
+---
+
+### 2. Navigating the AWS Management Console
+
+I learned how to navigate the AWS Console and access EC2 services.
+
+![EC2 Console Navigation](./intro1.png)
+
+*Figure 1: Accessing EC2 from the AWS Management Console*
+
+**Areas Explored**
+
+- AWS Dashboard
+- EC2 Dashboard
+- Running Instances
+- Instance Launch Wizard
+- Security Groups
+- Key Pairs
+- Volumes
+- Elastic IPs
+- Monitoring Section
+
+**Skills Gained**
+
+- Navigating AWS regions
+- Understanding resource organization
+- Managing cloud resources from the console
+
+---
+
+### 3. Understanding VPC and Networking
+
+I learned how Virtual Private Cloud (VPC) provides network isolation for EC2 instances.
+
+![VPC Configuration](./edit-vpc11.png)
+
+*Figure 2: Configuring VPC settings for EC2*
+
+**VPC Concepts Explored**
+
+| Concept | Purpose |
+|---------|---------|
+| VPC CIDR block | IP address range for your cloud network |
+| Subnets | Segments of VPC (public vs. private) |
+| Route tables | Direct traffic between subnets and internet |
+| Internet Gateway | Allows internet access to public subnets |
+| Security Groups | Instance-level firewall |
+| NACLs | Subnet-level firewall |
+
+**Public vs Private Subnets**
+
+- **Public Subnet**: Has route to Internet Gateway; instances get public IPs
+- **Private Subnet**: No direct internet access; more secure for databases
+- **Best Practice**: Web servers in public subnets, databases in private subnets
+
+---
+
+### 4. Understanding Security Groups
+
+Security Groups act as virtual firewalls for EC2 instances.
+
+![Security Group Configuration](./vpc-group12.png)
+
+*Figure 3: Configuring security group rules for EC2 instances*
+
+**Security Group Rules Configured**
+
+| Rule Type | Protocol | Port | Source | Purpose |
+|-----------|----------|------|--------|---------|
+| SSH | TCP | 22 | My IP | Secure remote administration |
+| HTTP | TCP | 80 | 0.0.0.0/0 | Web server access |
+| HTTPS | TCP | 443 | 0.0.0.0/0 | Secure web access |
+| MySQL/Aurora | TCP | 3306 | App SG | Database access |
+
+**Key Security Group Principles**
+
+- Stateful (return traffic automatically allowed)
+- Can reference other security groups, not just IP addresses
+- Inbound rules control incoming traffic
+- Outbound rules control outgoing traffic
+- Changes apply immediately to all associated instances
+
+---
+
+### 5. Understanding IAM Roles for EC2
+
+IAM roles provide permissions to EC2 instances and other AWS services.
+
+![IAM Execution Role](./execution-role6.png)
+
+*Figure 4: Configuring IAM execution role for EC2*
+
+**Key Concepts**
+
+- IAM roles vs. users — roles are for services, users are for people
+- Least privilege principle — only grant what is needed
+- Trust policies define which services can assume the role
+- Permission policies define what actions the role can perform
+
+**Example IAM Policy for EC2 Access:**
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeInstances",
+                "ec2:StartInstances",
+                "ec2:StopInstances"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+```
+
+---
+
+### 6. Configuring AWS CLI for EC2 Management
+
+I learned how to configure AWS CLI to manage EC2 instances from the command line.
+
+![AWS CLI Configuration](./aws-configure17.png)
+
+*Figure 5: Configuring AWS CLI with access keys*
+
+**AWS CLI Configuration Steps:**
+
+```bash
+aws configure
+AWS Access Key ID:     <your-access-key>
+AWS Secret Access Key: <your-secret-key>
+Default region name:   us-west-2
+Default output format: json
+```
+
+**Configuration Components**
+
+| Component | Purpose |
+|-----------|---------|
+| Access Key ID | Identifies the IAM user (starts with AKIA) |
+| Secret Access Key | Password equivalent — keep secret! |
+| Region | Where API calls are sent |
+| Output format | json, yaml, text, or table |
+
+**Where Credentials Are Stored**
+
+- `~/.aws/credentials` — Access keys
+- `~/.aws/config` — Region and output settings
+
+> ⚠️ **Security Warning**: Never share or commit credentials. Use IAM roles on EC2 instances instead of long-term access keys wherever possible.
+
+---
+
+### 7. EC2 vs Serverless — Understanding the Trade-offs
+
+| Feature | AWS Lambda | EC2 |
+|---------|------------|-----|
+| Server management | AWS handles | You manage |
+| Scaling | Automatic | Manual or Auto Scaling |
+| Cost model | Pay per request + duration | Pay per hour (even when idle) |
+| Execution timeout | 15 minutes max | Unlimited |
+| Best for | Event-driven, short tasks | Long-running, stateful apps |
+
+**Monthly Cost Estimate**
+
+| Instance Type | Use Case | Approx. Cost/Month |
+|---------------|----------|--------------------|
+| t2.micro | Dev/test, small apps | ~$8.50 |
+| t3.small | Low-traffic web server | ~$15.00 |
+| t3.medium | Medium workloads | ~$30.00 |
+
+---
+
+## Skills Summary
+
+| Category | Skills Gained |
+|----------|--------------|
+| **EC2 Console** | Launching instances, managing state, connecting via SSH |
+| **VPC & Networking** | Subnets, route tables, internet gateways, public vs private |
+| **Security Groups** | Configuring inbound/outbound rules, referencing other SGs |
+| **IAM** | Creating roles, attaching policies, least privilege principle |
+| **AWS CLI** | Configuring credentials, running EC2 commands |
+| **Cost Awareness** | Estimating monthly costs, comparing EC2 vs serverless |
+
+---
+
+## Common Errors and Solutions
+
+| Error | Cause | Solution |
+|-------|-------|---------|
+| Connection timeout on SSH | Port 22 not open | Add inbound SSH rule in Security Group |
+| Instance unreachable | No public IP / wrong subnet | Ensure public subnet with Internet Gateway route |
+| `AccessDeniedException` | Missing IAM permissions | Attach the required policy to the IAM role |
+| High unexpected cost | Instance left running | Stop or terminate unused instances; set billing alerts |
+| Can't reach the internet from instance | Missing Internet Gateway route | Add `0.0.0.0/0 → igw-xxxx` to public route table |
+
+---
+
+## Next Learning Goals
+
+| Topic | Why It's Important |
+|-------|-------------------|
+| Load Balancers | Distribute traffic across multiple EC2 instances |
+| Auto Scaling | Automatically adjust capacity based on demand |
+| AMIs (Custom Images) | Launch pre-configured instances faster |
+| Elastic IPs | Persistent public IP addresses for EC2 |
+| EBS Volumes | Persistent block storage attached to instances |
+| IAM Roles Deep Dive | Advanced permission management for EC2 |
+| VPC Peering | Connect multiple VPCs securely |
+| CloudFormation | Automate EC2 and VPC provisioning as code |
+
+---
+
+## Resources Used
+
+- AWS Free Tier account
+- AWS EC2 console
+- AWS VPC console
+- IAM console
+- AWS CLI
+
+---
+
+## Final Reflection
+
+This lab built a solid foundation in EC2 and AWS networking. Key takeaways:
+
+**VPC and networking are foundational** — before launching any EC2 instance, you need to understand subnets, route tables, and security groups. Getting these wrong means your instance is either unreachable or insecure.
+
+**Security Groups are your first defence** — the principle of least privilege applies directly here. Only open the ports you need, and restrict SSH to your own IP.
+
+**IAM roles over access keys** — attaching an IAM role to an EC2 instance is always safer than embedding long-term credentials in the instance itself.
+
+**Cost awareness matters** — unlike serverless, EC2 charges by the hour even when idle. Stopping unused instances is a habit worth building early.
+
+---
+
+**Lab Status**: ✅ COMPLETED
+**Date**: May 13, 2026
+**Environment**: AWS us-west-2 (Oregon)
+
+---
+
+*"In the cloud, you don't own the hardware — you own the configuration."*# 🖥️ AWS EC2: Elastic Compute Cloud Deep Dive
+
 ## What I Learned
 
 ### 1. What Amazon EC2 Is
