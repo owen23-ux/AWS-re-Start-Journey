@@ -1,496 +1,238 @@
-# 🖥️ AWS EC2: Elastic Compute Cloud Deep Dive
+# 🖥️  AWS Lambda: Serverless Computing Deep Dive
 
-**Date Completed**: May 13, 2026
-**Service**: Amazon EC2 (Virtual Servers in the Cloud)
-**Environment**: AWS us-west-2 (Oregon)
+Date Completed: May 13, 2026
+Time Spent: 2 hours
+Service: AWS Lambda (Serverless Functions in the Cloud)
+What I Learned
+1. What AWS Lambda Is
 
----
+AWS Lambda is a serverless compute service that allows you to run code without provisioning or managing servers.
 
-## What I Learned
+Lambda automatically scales your applications and only charges you for the compute time you consume.
 
-### 1. What Amazon EC2 Is
+Common Uses of Lambda
 
-Amazon EC2 (Elastic Compute Cloud) is an AWS service that allows users to create and manage virtual servers in the cloud. It provides scalable computing capacity without needing to buy or manage physical hardware.
+    Running code in response to events (S3 uploads, API calls)
 
-**Common Uses of EC2**
+    Data processing and ETL jobs
 
-- Hosting web applications
-- Running Linux servers
-- Backend APIs
-- Databases
-- Cloud labs and testing
-- DevOps environments
-- Security testing environments
+    Real-time file processing
 
----
+    Backend APIs (with API Gateway)
 
-### 2. Navigating the AWS Management Console
+    Scheduled tasks (cron jobs)
 
-I learned how to navigate the AWS Console and access EC2 services.
+    Chatbots and microservices
 
-![EC2 Console Navigation](./intro1.png)
+    Infrastructure automation
 
-*Figure 1: Accessing EC2 from the AWS Management Console*
+2. Navigating the AWS Management Console for Lambda
 
-**Areas Explored**
+I learned how to navigate the AWS Console and access Lambda services.
 
-- AWS Dashboard
-- EC2 Dashboard
-- Running Instances
-- Instance Launch Wizard
-- Security Groups
-- Key Pairs
-- Volumes
-- Elastic IPs
-- Monitoring Section
+Areas Explored
 
-**Skills Gained**
+    AWS Dashboard
 
-- Navigating AWS regions
-- Understanding resource organization
-- Managing cloud resources from the console
+    Lambda Dashboard
 
----
+    Functions
 
-### 3. Understanding VPC and Networking
+    Layers
 
-I learned how Virtual Private Cloud (VPC) provides network isolation for EC2 instances.
+    Event Source Mappings
 
-![VPC Configuration](./edit-vpc11.png)
+    Monitoring Section
 
-*Figure 2: Configuring VPC settings for EC2*
+    Metrics and Logs
 
-**VPC Concepts Explored**
+Skills Gained
 
-| Concept | Purpose |
-|---------|---------|
-| VPC CIDR block | IP address range for your cloud network |
-| Subnets | Segments of VPC (public vs. private) |
-| Route tables | Direct traffic between subnets and internet |
-| Internet Gateway | Allows internet access to public subnets |
-| Security Groups | Instance-level firewall |
-| NACLs | Subnet-level firewall |
+    Navigating AWS regions for Lambda
 
-**Public vs Private Subnets**
+    Understanding function organization
 
-- **Public Subnet**: Has route to Internet Gateway; instances get public IPs
-- **Private Subnet**: No direct internet access; more secure for databases
-- **Best Practice**: Web servers in public subnets, databases in private subnets
+    Managing serverless resources from the console
 
----
+3. Creating a Lambda Function
 
-### 4. Understanding Security Groups
+I learned the step-by-step process of creating a Lambda function.
 
-Security Groups act as virtual firewalls for EC2 instances.
+Function Creation Options
+Option	Description	Best For
+Author from scratch	Start with simple Hello World	Full control, custom code
+Use a blueprint	Sample code for common use cases	Quick starts (S3, DynamoDB triggers)
+Container image	Deploy containerized applications	Larger dependencies, custom runtimes
 
-![Security Group Configuration](./vpc-group12.png)
+Function Configuration I Used
+Setting	My Value
+Function name	salesAnalysisReportDataExtractor
+Runtime	Python 3.14
+Architecture	arm64
+Permissions	salesAnalysisReportDERole
+4. Understanding IAM Roles for Lambda
 
-*Figure 3: Configuring security group rules for EC2 instances*
+I learned how IAM roles provide permissions for Lambda functions to access other AWS services.
 
-**Security Group Rules Configured**
+Key Concepts Learned
 
-| Rule Type | Protocol | Port | Source | Purpose |
-|-----------|----------|------|--------|---------|
-| SSH | TCP | 22 | My IP | Secure remote administration |
-| HTTP | TCP | 80 | 0.0.0.0/0 | Web server access |
-| HTTPS | TCP | 443 | 0.0.0.0/0 | Secure web access |
-| MySQL/Aurora | TCP | 3306 | App SG | Database access |
+    IAM roles vs. users (roles are for AWS services, users are for people)
 
-**Key Security Group Principles**
+    Least privilege principle (only grant necessary permissions)
 
-- Stateful (return traffic automatically allowed)
-- Can reference other security groups, not just IP addresses
-- Inbound rules control incoming traffic
-- Outbound rules control outgoing traffic
-- Changes apply immediately to all associated instances
+    Trust policies (allows Lambda to assume the role)
 
----
+    Permission policies (what the role can do)
 
-### 5. Understanding IAM Roles for EC2
+Example IAM Policy for Lambda Function:
+json
 
-IAM roles provide permissions to EC2 instances and other AWS services.
-
-![IAM Execution Role](./execution-role6.png)
-
-*Figure 4: Configuring IAM execution role for EC2*
-
-**Key Concepts**
-
-- IAM roles vs. users — roles are for services, users are for people
-- Least privilege principle — only grant what is needed
-- Trust policies define which services can assume the role
-- Permission policies define what actions the role can perform
-
-**Example IAM Policy for EC2 Access:**
-
-```json
 {
     "Version": "2012-10-17",
     "Statement": [
         {
             "Effect": "Allow",
             "Action": [
-                "ec2:DescribeInstances",
-                "ec2:StartInstances",
-                "ec2:StopInstances"
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
             ],
             "Resource": "*"
-        }
-    ]
-}
-```
-
----
-
-### 6. Configuring AWS CLI for EC2 Management
-
-I learned how to configure AWS CLI to manage EC2 instances from the command line.
-
-![AWS CLI Configuration](./aws-configure17.png)
-
-*Figure 5: Configuring AWS CLI with access keys*
-
-**AWS CLI Configuration Steps:**
-
-```bash
-aws configure
-AWS Access Key ID:     <your-access-key>
-AWS Secret Access Key: <your-secret-key>
-Default region name:   us-west-2
-Default output format: json
-```
-
-**Configuration Components**
-
-| Component | Purpose |
-|-----------|---------|
-| Access Key ID | Identifies the IAM user (starts with AKIA) |
-| Secret Access Key | Password equivalent — keep secret! |
-| Region | Where API calls are sent |
-| Output format | json, yaml, text, or table |
-
-**Where Credentials Are Stored**
-
-- `~/.aws/credentials` — Access keys
-- `~/.aws/config` — Region and output settings
-
-> ⚠️ **Security Warning**: Never share or commit credentials. Use IAM roles on EC2 instances instead of long-term access keys wherever possible.
-
----
-
-### 7. EC2 vs Serverless — Understanding the Trade-offs
-
-| Feature | AWS Lambda | EC2 |
-|---------|------------|-----|
-| Server management | AWS handles | You manage |
-| Scaling | Automatic | Manual or Auto Scaling |
-| Cost model | Pay per request + duration | Pay per hour (even when idle) |
-| Execution timeout | 15 minutes max | Unlimited |
-| Best for | Event-driven, short tasks | Long-running, stateful apps |
-
-**Monthly Cost Estimate**
-
-| Instance Type | Use Case | Approx. Cost/Month |
-|---------------|----------|--------------------|
-| t2.micro | Dev/test, small apps | ~$8.50 |
-| t3.small | Low-traffic web server | ~$15.00 |
-| t3.medium | Medium workloads | ~$30.00 |
-
----
-
-## Skills Summary
-
-| Category | Skills Gained |
-|----------|--------------|
-| **EC2 Console** | Launching instances, managing state, connecting via SSH |
-| **VPC & Networking** | Subnets, route tables, internet gateways, public vs private |
-| **Security Groups** | Configuring inbound/outbound rules, referencing other SGs |
-| **IAM** | Creating roles, attaching policies, least privilege principle |
-| **AWS CLI** | Configuring credentials, running EC2 commands |
-| **Cost Awareness** | Estimating monthly costs, comparing EC2 vs serverless |
-
----
-
-## Common Errors and Solutions
-
-| Error | Cause | Solution |
-|-------|-------|---------|
-| Connection timeout on SSH | Port 22 not open | Add inbound SSH rule in Security Group |
-| Instance unreachable | No public IP / wrong subnet | Ensure public subnet with Internet Gateway route |
-| `AccessDeniedException` | Missing IAM permissions | Attach the required policy to the IAM role |
-| High unexpected cost | Instance left running | Stop or terminate unused instances; set billing alerts |
-| Can't reach the internet from instance | Missing Internet Gateway route | Add `0.0.0.0/0 → igw-xxxx` to public route table |
-
----
-
-## Next Learning Goals
-
-| Topic | Why It's Important |
-|-------|-------------------|
-| Load Balancers | Distribute traffic across multiple EC2 instances |
-| Auto Scaling | Automatically adjust capacity based on demand |
-| AMIs (Custom Images) | Launch pre-configured instances faster |
-| Elastic IPs | Persistent public IP addresses for EC2 |
-| EBS Volumes | Persistent block storage attached to instances |
-| IAM Roles Deep Dive | Advanced permission management for EC2 |
-| VPC Peering | Connect multiple VPCs securely |
-| CloudFormation | Automate EC2 and VPC provisioning as code |
-
----
-
-## Resources Used
-
-- AWS Free Tier account
-- AWS EC2 console
-- AWS VPC console
-- IAM console
-- AWS CLI
-
----
-
-## Final Reflection
-
-This lab built a solid foundation in EC2 and AWS networking. Key takeaways:
-
-**VPC and networking are foundational** — before launching any EC2 instance, you need to understand subnets, route tables, and security groups. Getting these wrong means your instance is either unreachable or insecure.
-
-**Security Groups are your first defence** — the principle of least privilege applies directly here. Only open the ports you need, and restrict SSH to your own IP.
-
-**IAM roles over access keys** — attaching an IAM role to an EC2 instance is always safer than embedding long-term credentials in the instance itself.
-
-**Cost awareness matters** — unlike serverless, EC2 charges by the hour even when idle. Stopping unused instances is a habit worth building early.
-
----
-
-**Lab Status**: ✅ COMPLETED
-**Date**: May 13, 2026
-**Environment**: AWS us-west-2 (Oregon)
-
----
-
-*"In the cloud, you don't own the hardware — you own the configuration."*# 🖥️ AWS EC2: Elastic Compute Cloud Deep Dive
-
-## What I Learned
-
-### 1. What Amazon EC2 Is
-
-Amazon EC2 (Elastic Compute Cloud) is an AWS service that allows users to create and manage virtual servers in the cloud.
-
-EC2 provides scalable computing capacity without needing to buy or manage physical hardware.
-
-**Common Uses of EC2**
-
-- Hosting web applications
-- Running Linux servers
-- Backend APIs
-- Databases
-- Cloud labs and testing
-- DevOps environments
-- Security testing environments
-
----
-
-### 2. Navigating the AWS Management Console
-
-I learned how to navigate the AWS Console and access EC2 services.
-
-![EC2 Console Navigation](./intro1.png)
-
-*Figure 1: Accessing EC2 from the AWS Management Console*
-
-**Areas Explored**
-
-- AWS Dashboard
-- EC2 Dashboard
-- Running Instances
-- Instance Launch Wizard
-- Security Groups
-- Key Pairs
-- Volumes
-- Elastic IPs
-- Monitoring Section
-
-**Skills Gained**
-
-- Navigating AWS regions
-- Understanding resource organization
-- Managing cloud resources from the console
-
----
-
-### 3. Understanding Lambda Functions (Project Context)
-
-Before creating EC2 instances, I learned how serverless functions work in comparison to traditional servers.
-
-![Lambda Function Creation](./create-function5.png)
-
-*Figure 2: Creating a Lambda function for serverless computing*
-
-**What I Learned About Lambda vs EC2**
-
-| Feature | AWS Lambda | EC2 |
-|---------|------------|-----|
-| Server management | AWS handles | You manage |
-| Scaling | Automatic | Manual or Auto Scaling |
-| Cost model | Pay per request + duration | Pay per hour (even idle) |
-| Execution timeout | 15 minutes max | Unlimited |
-| Best for | Event-driven, short tasks | Long-running, stateful apps |
-
----
-
-### 4. Understanding IAM Roles for EC2 and Lambda
-
-I learned how IAM roles provide permissions to AWS services.
-
-![IAM Execution Role](./execution-role6.png)
-
-*Figure 3: Configuring IAM execution role for AWS services*
-
-**Key Concepts Learned**
-
-- IAM roles vs. users (roles are for services, users are for people)
-- Least privilege principle
-- Trust policies (which services can assume the role)
-- Permission policies (what actions the role can perform)
-
-**Example IAM Policy for EC2 Access:**
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
+        },
         {
             "Effect": "Allow",
             "Action": [
-                "ec2:DescribeInstances",
-                "ec2:StartInstances",
-                "ec2:StopInstances"
+                "ssm:GetParameter"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "sns:Publish"
             ],
             "Resource": "*"
         }
     ]
 }
-```
 
----
+5. Understanding Lambda Layers
 
-### 5. Understanding VPC and Networking
+I learned how Lambda layers help manage external dependencies and libraries.
 
-I learned how Virtual Private Cloud (VPC) provides network isolation for EC2 instances.
+What I Learned About Lambda Layers
+Concept	Explanation
+Purpose	Package libraries separately from function code
+Size limit	250 MB unzipped (50 MB zipped for console)
+Maximum layers	5 layers per function
+Storage	Layers are extracted to /opt in execution environment
 
-![VPC Configuration](./edit-vpc11.png)
+Layer Creation Process:
+bash
 
-*Figure 4: Configuring VPC settings for EC2 and Lambda*
-
-**VPC Concepts Explored**
-
-| Concept | Purpose |
-|---------|---------|
-| VPC CIDR block | IP address range for your cloud network |
-| Subnets | Segments of VPC (public vs. private) |
-| Route tables | Direct traffic between subnets and internet |
-| Internet Gateway | Allows internet access to public subnets |
-| Security Groups | Instance-level firewall |
-| NACLs | Subnet-level firewall |
-
-**What I Learned About Public vs Private Subnets**
-
-- **Public Subnet**: Has route to Internet Gateway, instances get public IPs
-- **Private Subnet**: No direct internet access, more secure for databases
-- **Best Practice**: Web servers in public subnets, databases in private subnets
-
----
-
-### 6. Understanding Security Groups
-
-Security Groups act as virtual firewalls for EC2 instances.
-
-![Security Group Configuration](./vpc-group12.png)
-
-*Figure 5: Configuring security group rules for EC2 instances*
-
-**Security Group Rules I Configured**
-
-| Rule Type | Protocol | Port | Source | Purpose |
-|-----------|----------|------|--------|---------|
-| SSH | TCP | 22 | My IP | Secure remote administration |
-| HTTP | TCP | 80 | 0.0.0.0/0 | Web server access |
-| HTTPS | TCP | 443 | 0.0.0.0/0 | Secure web access |
-| MySQL/Aurora | TCP | 3306 | Lambda SG | Database access from Lambda |
-
-**Key Security Group Principles Learned**
-
-- Stateful (return traffic automatically allowed)
-- Can reference other security groups (not just IPs)
-- Inbound rules control incoming traffic
-- Outbound rules control outgoing traffic
-- Changes apply immediately to all associated instances
-
----
-
-### 7. Creating Lambda Layers for Dependencies
-
-I learned how Lambda layers help manage code dependencies.
-
-![Creating Lambda Layer](./Creating-layer4.png)
-
-*Figure 6: Creating a custom Lambda layer for PyMySQL library*
-
-**What I Learned About Lambda Layers**
-
-**Purpose**: Layers allow you to package libraries and dependencies separately from function code.
-
-**Layer Creation Process:**
-```bash
-# 1. Install library in python folder
+# 1. Install library in python folder structure
 pip install pymysql -t python/
 
 # 2. Zip the folder
 zip -r pymysql-layer.zip python/
 
 # 3. Upload to AWS Lambda as a layer
-```
 
-**Benefits of Layers:**
-- Keep deployment packages small (<50MB)
-- Share common code across multiple functions
-- Update dependencies without changing function code
-- Version control for libraries
+Benefits of Layers:
 
----
+    Keep deployment packages small (<50MB)
 
-### 8. Adding Layers to Functions
+    Share common code across multiple functions
+
+    Update dependencies without changing function code
+
+    Version control for libraries
+
+6. Adding Layers to Lambda Functions
 
 I learned how to attach existing layers to Lambda functions.
 
-![Add Layer to Function](./add-layers7.png)
+Layer Source Options
+Source	When to Use
+AWS layers	Pre-built layers (Pandas, NumPy, Requests)
+Custom layers	Your own packaged dependencies
+Specify ARN	Layers from other AWS accounts
 
-*Figure 7: Adding PyMySQL layer to Lambda function*
+Compatibility Requirements:
 
-**Layer Selection Options:**
+    ✅ Runtime matches (Python 3.14)
 
-| Source | When to Use |
-|--------|-------------|
-| AWS Layers | Pre-built layers (Pandas, NumPy, etc.) |
-| Custom Layers | Your own packaged dependencies |
-| Specify ARN | Layers from other AWS accounts |
+    ✅ Architecture matches (arm64 or x86_64)
 
-**Compatibility Checklist:**
-- ✅ Runtime matches (Python 3.14)
-- ✅ Architecture matches (arm64 or x86_64)
-- ✅ Region matches (layers are region-specific)
+    ✅ Region matches (layers are region-specific)
 
----
+7. Understanding VPC for Lambda Functions
 
-### 9. Writing Lambda Function Code
+I learned how to connect Lambda functions to VPCs for accessing private resources.
 
-I learned how to write Python code for Lambda functions that interacts with databases.
+VPC Concepts Explored
+Concept	Purpose
+VPC	Isolated network in AWS cloud
+Subnets	Segments of VPC (public vs. private)
+Security Groups	Instance-level firewall rules
+ENI (Elastic Network Interface)	Lambda attaches ENIs in your VPC
 
-![Lambda Code Source](./code-source10.png)
+Important Understanding:
 
-*Figure 8: Writing Lambda function code for sales analysis*
+    Lambda runs in AWS-owned VPC by default
 
-**Complete Lambda Function Code:**
-```python
+    VPC-attached Lambda loses default internet access
+
+    To give internet access: route to NAT Gateway in public subnet
+
+    Choose at least 2 subnets for high availability
+
+8. Understanding Security Groups for Lambda
+
+Security Groups act as virtual firewalls for Lambda functions in a VPC.
+
+Security Group Rules I Configured
+Rule Type	Protocol	Port	Source	Purpose
+MySQL/Aurora	TCP	3306	Lambda SG	Database access
+Outbound	All	All	0.0.0.0/0	Allow all outbound
+
+Key Security Group Principles for Lambda:
+
+    Inbound rules don't matter - Lambda only initiates connections
+
+    Outbound rules matter - Must allow connections to resources (databases, APIs)
+
+    No inbound needed - Lambda is event-driven, not accepting incoming connections
+
+    Security groups are stateful - Return traffic automatically allowed
+
+9. Writing Lambda Function Code
+
+I learned how to write Python code for Lambda functions.
+
+Lambda Handler Structure:
+python
+
+import boto3
+import pymysql
+import json
+
+def lambda_handler(event, context):
+    """
+    Lambda function entry point
+    event: Trigger data (what invoked the function)
+    context: Runtime information (timeout, memory, function name)
+    """
+    
+    # Your logic here
+    return {
+        'statusCode': 200,
+        'body': json.dumps({'message': 'Success'})
+    }
+
+Complete Lambda Function Code I Wrote:
+python
+
 import boto3
 import pymysql
 import json
@@ -499,6 +241,7 @@ from datetime import datetime
 def lambda_handler(event, context):
     """
     Extracts sales analysis data from MariaDB database
+    Triggered by main salesAnalysisReport function
     """
     
     # Retrieve database credentials from Parameter Store
@@ -520,14 +263,14 @@ def lambda_handler(event, context):
         )
         
         with conn.cursor() as cursor:
-            cursor.execute("SELECT * FROM sales WHERE date = CURDATE()")
+            cursor.execute("SELECT * FROM sales WHERE sale_date = CURDATE()")
             results = cursor.fetchall()
             
         conn.close()
         
         return {
             'statusCode': 200,
-            'body': json.dumps(results)
+            'body': json.dumps(results, default=str)
         }
         
     except Exception as e:
@@ -536,576 +279,434 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'body': json.dumps({'error': str(e)})
         }
-```
 
-**Key Coding Concepts Learned:**
-- Never hardcode credentials (use Parameter Store)
-- Always use try-except blocks for error handling
-- Return proper HTTP status codes
-- Log errors to CloudWatch for debugging
+Key Coding Concepts Learned:
 
----
+    Never hardcode credentials (use Parameter Store or Secrets Manager)
 
-### 10. Understanding Runtime Settings
+    Always use try-except blocks for error handling
+
+    Return proper HTTP status codes (200 for success, 500 for errors)
+
+    Log errors to CloudWatch for debugging
+
+    Use json.dumps() with default=str for datetime objects
+
+10. Understanding Runtime Settings
 
 I learned how to configure Lambda runtime settings.
 
-![Runtime Settings](./run-time8.png)
+Runtime Configuration Options:
+Setting	My Configuration	Purpose
+Runtime	Python 3.14	Programming language version
+Handler	filename.function_name	Entry point for code execution
+Architecture	arm64	CPU type (20% cheaper than x86_64)
+Memory	128 MB - 10 GB	RAM allocation (affects CPU proportionally)
+Timeout	3 seconds - 15 minutes	Maximum execution time before termination
+Ephemeral storage	512 MB - 10 GB	Temporary /tmp storage
 
-*Figure 9: Configuring runtime and handler settings*
+Handler Format Explained:
+text
 
-**Runtime Configuration Options:**
-
-| Setting | My Configuration | Purpose |
-|---------|-----------------|---------|
-| Runtime | Python 3.14 | Language version |
-| Handler | `filename.function_name` | Entry point for code |
-| Architecture | arm64 | CPU type (cheaper than x86_64) |
-| Memory | 128 MB - 10 GB | RAM allocation (affects CPU) |
-| Timeout | 3 seconds - 15 minutes | Maximum execution time |
-
-**Handler Format Explained:**
-```
 salesAnalysisReportDataExtractor.lambda_handler
 │                              │
-│                              └── Function name inside file
-└── Python file name (without .py)
-```
+│                              └── Function name inside the Python file
+└── Python file name (without .py extension)
 
----
-
-### 11. Uploading Deployment Packages
+11. Uploading Deployment Packages
 
 I learned how to upload code to Lambda functions.
 
-![Upload Code Package](./upload9.png)
+Deployment Package Limits:
+Upload Method	Maximum Size
+Direct console upload	50 MB (zipped)
+Amazon S3 upload	250 MB (unzipped)
+Container image	10 GB
 
-*Figure 10: Uploading deployment package .zip file*
+Best Practices for Deployment Packages:
 
-**Deployment Package Limits:**
+    Put dependencies in layers, not in the deployment package
 
-| Upload Method | Maximum Size |
-|---------------|--------------|
-| Direct console upload | 50 MB (zipped) |
-| Amazon S3 upload | 250 MB (unzipped) |
-| Container image | 10 GB |
+    Remove test files and documentation
 
-**Best Practices for Deployment Packages:**
-- Put dependencies in layers (not in package)
-- Remove test files and documentation
-- Use `.gitignore` to exclude unnecessary files
-- Compress efficiently (no nested folders if possible)
+    Use .gitignore to exclude unnecessary files
 
----
+    Compress efficiently (no nested folders if possible)
 
-### 12. Creating Test Events
+12. Creating Test Events
 
-I learned how to create test events to invoke Lambda functions.
+I learned how to create test events to invoke and test Lambda functions.
 
-![Create Test Event](./create-test-event14.png)
+Test Event Structure I Created:
+json
 
-*Figure 11: Creating test event for Lambda invocation*
-
-**Test Event Structure:**
-```json
 {
     "dbUrl": "cafe-db.cafeshop.us-west-2.rds.amazonaws.com",
     "dbName": "cafe_db",
     "dbUser": "cafe_user",
     "dbPassword": "CafePassword123!"
 }
-```
 
-**Invocation Types:**
+Invocation Types:
+Type	Behavior	Maximum Timeout	Use Case
+Synchronous (RequestResponse)	Waits for response	15 minutes	API Gateway, testing
+Asynchronous (Event)	Queues execution, returns immediately	N/A	S3 events, scheduled tasks
 
-| Type | Behavior | Use Case |
-|------|----------|----------|
-| Synchronous | Waits for response (max 15 min) | API Gateway, testing |
-| Asynchronous | Queues execution, returns immediately | S3 events, scheduled tasks |
+Event Sharing Settings:
 
-**Event Sharing Settings:**
-- **Private**: Only visible to you (good for personal testing)
-- **Shared**: Visible to team members (good for collaboration)
+    Private: Only visible to you (good for personal testing)
 
----
+    Shared: Visible to team members (good for collaboration)
 
-### 13. Creating SNS Topics for Notifications
+13. Creating SNS Topics for Notifications
 
-I learned how to create SNS topics for email notifications.
+I learned how to create SNS topics for Lambda to send email notifications.
 
-![Create SNS Topic](./create-topic15.png)
+SNS Topic Types:
+Feature	Standard	FIFO (First-In-First-Out)
+Message ordering	Best-effort	Strict (preserved order)
+Message delivery	At-least-once	Exactly-once
+Throughput	High (unlimited)	300 messages per second
+Supported protocols	SQS, Lambda, HTTP, Email, SMS	SQS only
 
-*Figure 12: Creating SNS topic for report delivery*
+Topic Configuration I Used:
 
-**SNS Topic Types:**
+    Name: salesAnalysisReportTopic
 
-| Feature | Standard | FIFO |
-|---------|----------|------|
-| Message ordering | Best-effort | Strict (FIFO) |
-| Delivery | At-least-once | Exactly-once |
-| Throughput | High (unlimited) | 300 msg/sec |
-| Protocols | SQS, Lambda, HTTP, Email, SMS | SQS only |
+    Type: Standard (for email notifications)
 
-**Topic Configuration:**
-- **Name**: `salesAnalysisReportTopic`
-- **Type**: Standard (for email notifications)
-- **Display name**: First 10 characters appear in SMS
+    Display name: SARTopic (first 10 characters appear in SMS)
 
----
-
-### 14. Creating Email Subscriptions
+14. Creating Email Subscriptions
 
 I learned how to subscribe email endpoints to SNS topics.
 
-![Create Subscription](./subscription16.png)
+Subscription Workflow:
 
-*Figure 13: Creating email subscription for report delivery*
+    Create subscription with protocol "Email"
 
-**Subscription Workflow:**
-1. Create subscription with protocol "Email"
-2. Enter endpoint email address
-3. AWS sends confirmation email
-4. User clicks confirmation link
-5. Subscription becomes "Confirmed"
-6. Messages are delivered
+    Enter endpoint email address
 
-**Critical Understanding**: Without clicking the confirmation link, NO emails will be received!
+    AWS sends confirmation email to the address
 
-**Confirmation Email Example:**
-```
+    User clicks the confirmation link
+
+    Subscription becomes "Confirmed"
+
+    Messages are delivered to the email address
+
+Critical Understanding: Without clicking the confirmation link in the email, NO messages will be delivered!
+
+Confirmation Email Example:
+text
+
 From: AWS Notifications <no-reply@sns.amazonaws.com>
 Subject: AWS Notification - Subscription Confirmation
 
-Please confirm your subscription by clicking:
-https://sns.us-west-2.amazonaws.com/confirmation.html?...
-```
+Please confirm your subscription by clicking the following link:
+https://sns.us-west-2.amazonaws.com/confirmation.html?TopicArn=...
 
----
+15. Configuring AWS CLI
 
-### 15. Configuring AWS CLI
+I learned how to configure AWS CLI for command-line management of Lambda and other services.
 
-I learned how to configure AWS CLI for command-line management.
+AWS CLI Configuration Steps:
+bash
 
-![AWS CLI Configuration](./aws-configure17.png)
-
-*Figure 14: Configuring AWS CLI with access keys*
-
-**AWS CLI Configuration Steps:**
-```bash
 aws configure
 AWS Access Key ID: AKIAXHD3RNH5K5NW74TV
-AWS Secret Access Key: Keeping it as a Secret
+AWS Secret Access Key: Kept Secretley
 Default region name: us-west-2
 Default output format: json
-```
 
-**Configuration Components:**
+Configuration Components:
+Component	Purpose
+Access Key ID	Identifies the IAM user (starts with AKIA)
+Secret Access Key	Password equivalent (KEEP SECRET!)
+Region	Where API calls are sent (us-west-2 = Oregon)
+Output format	json, yaml, text, or table
 
-| Component | Purpose |
-|-----------|---------|
-| Access Key ID | Identifies the IAM user (starts with AKIA) |
-| Secret Access Key | Password equivalent (KEEP SECRET!) |
-| Region | Where API calls are sent |
-| Output format | json, yaml, text, or table |
+Where Credentials Are Stored:
 
-**Where Credentials Are Stored:**
-- `~/.aws/credentials` - Access keys
-- `~/.aws/config` - Region and output settings
+    ~/.aws/credentials - Access keys (sensitive)
 
-**Security Warning**: Never share screenshots with visible access keys in production environments!
+    ~/.aws/config - Region and output settings
 
----
+Testing Lambda from CLI:
+bash
 
-### 16. Understanding the Complete Architecture
+aws lambda invoke \
+  --function-name salesAnalysisReportDataExtractor \
+  --payload file://test-event.json \
+  response.json
 
-I learned how all AWS services work together in a complete solution.
+16. Understanding the Complete Architecture
 
-![Complete Architecture](./diagram2.png)
+I learned how all AWS services work together in a complete serverless solution.
 
-*Figure 15: Complete architecture diagram of the sales analysis system*
+The 6-Step Workflow:
+Step	Action	Service
+1	CloudWatch Events triggers Lambda at 8 PM daily	Amazon CloudWatch Events
+2	Main Lambda function invokes data extractor	AWS Lambda
+3	Data extractor queries MariaDB database	Lambda + VPC + PyMySQL
+4	Query results returned to main function	AWS Lambda
+5	Results formatted and published to SNS topic	Amazon SNS
+6	Email sent to administrator	Amazon SNS + Email
 
-**The 6-Step Workflow:**
+Services Used Together:
+Service	Role in Architecture
+Lambda	Serverless compute (runs the report logic)
+CloudWatch Events	Scheduled triggers (8 PM daily)
+SNS	Email notifications (delivers reports)
+VPC	Network isolation (access private database)
+IAM	Security permissions (service access)
+Parameter Store	Secrets management (database credentials)
+CloudWatch Logs	Debugging and monitoring
+17. Understanding Lambda Limits and Quotas
 
-| Step | Action | Service |
-|------|--------|---------|
-| 1 | CloudWatch Events triggers Lambda at 8 PM daily | CloudWatch Events |
-| 2 | Main Lambda function invokes data extractor | Lambda |
-| 3 | Data extractor queries MariaDB database | Lambda + VPC |
-| 4 | Query results returned to main function | Lambda |
-| 5 | Results formatted and published to SNS topic | SNS |
-| 6 | Email sent to administrator | SNS + Email |
+I learned the important limits that apply to Lambda functions.
 
-**Services Used Together:**
-- **Lambda** - Serverless compute
-- **CloudWatch Events** - Scheduled triggers
-- **SNS** - Email notifications
-- **VPC** - Network isolation
-- **IAM** - Security permissions
-- **Parameter Store** - Secrets management
+Lambda Limits to Remember:
+Limit	Value	Impact
+Maximum execution timeout	15 minutes	Long-running processes need EC2 or Step Functions
+Maximum memory	10,240 MB (10 GB)	Memory also scales CPU proportionally
+Temporary storage (/tmp)	512 MB - 10 GB	Can be increased up to 10 GB
+Deployment package size (zipped)	50 MB	Put dependencies in layers
+Deployment package size (unzipped)	250 MB	Use S3 for larger packages
+Maximum layers per function	5	Plan dependency organization
+Maximum concurrent executions	1,000 (default)	Can request increase
+Environment variables	4 KB total	Use Parameter Store for larger configs
 
----
+Exam Tip: These limits frequently appear on the Cloud Practitioner exam.
+18. Understanding Lambda Pricing Model
 
-## Skills Summary
+I learned how Lambda pricing works and how to estimate costs.
 
-**Skills I Gained from This Lab:**
+Lambda Pricing Components:
+Component	Price (us-west-2)	Free Tier
+Requests	$0.20 per 1 million requests	1 million requests/month FREE
+Compute duration	$0.0000166667 per GB-second	400,000 GB-seconds/month FREE
 
-| Category | Skills |
-|----------|--------|
-| **AWS Console** | Navigating services, finding resources, understanding regions |
-| **Lambda** | Creating functions, attaching layers, configuring triggers |
-| **VPC & Networking** | Configuring subnets, security groups, understanding private vs public |
-| **IAM** | Creating roles, attaching policies, least privilege principle |
-| **SNS** | Creating topics, subscribing endpoints, confirming subscriptions |
-| **Python** | Writing Lambda handlers, using boto3, error handling |
-| **Databases** | Connecting to MySQL/MariaDB, querying data, PyMySQL library |
-| **CLI** | Configuring AWS CLI, running commands, managing keys |
-| **Monitoring** | CloudWatch Logs, debugging, error tracking |
+Pricing Formula:
+text
 
----
+Monthly Cost = (Total Requests × $0.20/1M) + (Duration GB-seconds × $0.0000166667)
 
-## Why Lambda Matters for Cloud Practitioner Exam
+GB-seconds Calculation:
+text
 
-**Exam Topics Covered:**
+GB-seconds = Memory(GB) × Duration(seconds) × Number of invocations
 
-| Exam Domain | What I Learned |
-|-------------|----------------|
-| **Compute Services** | Lambda vs EC2 comparison, serverless benefits |
-| **Serverless Value Prop** | No server management, automatic scaling, pay-per-use |
-| **AWS Global Infrastructure** | Lambda runs across Availability Zones |
-| **Pricing Models** | Pay per request + compute duration (GB-seconds) |
-| **Security** | IAM roles for Lambda execution permissions |
-| **VPC** | Connecting Lambda to private resources |
-| **SNS** | Notification services, email delivery |
+Example Calculation (My Lab):
 
-**Lambda Facts to Memorize for Exam:**
+    Memory: 128 MB = 0.125 GB
 
-- Maximum execution time: **15 minutes**
-- Maximum memory: **10 GB**
-- Temporary storage: **512 MB** (`/tmp`)
-- Deployment package limit: **50 MB (zipped)**
-- Free tier: **1 million requests/month** + 400,000 GB-seconds
+    Duration: 2 seconds per invocation
 
----
+    Invocations: 26 (once daily Monday-Saturday for 4 weeks)
 
-## Common Errors and Solutions
+text
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| `ModuleNotFoundError: No module named 'pymysql'` | Layer not attached | Verify layer is added and runtime matches |
-| `Timeout` | Function can't reach database | Check VPC, security groups, and routing |
-| `AccessDeniedException` | Missing IAM permissions | Add required policies to execution role |
-| `Cannot find handler` | Wrong handler format | Use `filename.function_name` format |
-| `No email received` | Subscription not confirmed | Click confirmation link from AWS email |
+GB-seconds = 0.125 × 2 × 26 = 6.5 GB-seconds
+Compute Cost = 6.5 × $0.000016667 = $0.000108
+Request Cost = 26 × ($0.20/1,000,000) = $0.0000052
+TOTAL = ~$0.00011/month (within free tier!)
 
----
+19. Monitoring Lambda with CloudWatch
 
-## Cost Analysis
+I learned how to monitor Lambda functions using CloudWatch.
 
-**Monthly Cost Estimate (26 invocations):**
+CloudWatch Metrics for Lambda:
+Metric	What It Tells You
+Invocations	Number of times function ran
+Duration	Execution time (p10, p50, p90, p99 percentiles)
+Errors	Number of failed invocations
+Throttles	When concurrency limits exceeded
+Iterator Age	Stream processing latency
+Concurrent Executions	Running instances of your function
 
-| Service | Usage | Cost |
-|---------|-------|------|
-| Lambda | 26 invocations × 2 seconds × 128MB | ~$0.00011 |
-| SNS | 26 email deliveries | ~$0.10 |
-| CloudWatch Logs | 1 MB storage | ~$0.0005 |
-| Parameter Store | 4 parameters | $0.00 (free tier) |
-| **TOTAL** | | **~$0.10/month** |
+Accessing CloudWatch Logs:
 
-**Traditional EC2 alternative**: $8.50/month for t2.micro (98% savings with serverless!)
+    Log group: /aws/lambda/salesAnalysisReportDataExtractor
 
----
+    Log streams: One per execution environment instance
 
-## Next Learning Goals
+    Print statements appear in logs automatically
+
+Debugging Commands:
+bash
+
+# View logs in CloudWatch
+aws logs tail /aws/lambda/salesAnalysisReportDataExtractor --follow
+
+# Check metrics
+aws cloudwatch get-metric-statistics \
+  --namespace AWS/Lambda \
+  --metric-name Duration \
+  --dimensions Name=FunctionName,Value=my-function \
+  --statistics Average
+
+20. Understanding Lambda Execution Lifecycle
+
+I learned how Lambda executes code and the difference between cold and warm starts.
+
+Cold Start (Function hasn't run recently):
+
+    AWS downloads your code to a new container
+
+    Runtime environment initializes (Python, Node.js, etc.)
+
+    Code outside handler runs (imports, global variables)
+
+    Handler function executes
+
+    Container stays warm for ~5-15 minutes
+
+Cold Start Time: 100ms - 1 second (depends on deployment package size)
+
+Warm Start (Function ran recently):
+
+    Reuses existing container with runtime already running
+
+    Skips download and initialization steps
+
+    Handler function executes immediately
+
+Warm Start Time: 1-10ms
+
+Why This Matters:
+
+    First request after deployment will be slower (cold start)
+
+    Subsequent requests are fast (warm start)
+
+    If no traffic for ~15 minutes, container shuts down
+
+    This is why Lambda isn't ideal for real-time/low-latency applications
+
+Skills Summary
+
+Skills I Gained from This Lab:
+Category	Skills
+AWS Console	Navigating Lambda dashboard, finding functions, understanding regions
+Lambda Functions	Creating functions, writing Python code, configuring handlers
+Lambda Layers	Creating layers, packaging dependencies, attaching to functions
+VPC & Networking	Configuring subnets, security groups, private resource access
+IAM	Creating execution roles, attaching policies, least privilege
+SNS	Creating topics, subscribing email endpoints, confirmation workflow
+Parameter Store	Storing and retrieving database credentials securely
+Python	Writing Lambda handlers, using boto3, PyMySQL, error handling
+CLI	Configuring AWS CLI, invoking Lambda from command line
+Monitoring	CloudWatch Logs, debugging, error tracking, metrics
+Why Lambda Matters for Cloud Practitioner Exam
+
+Exam Topics Covered:
+Exam Domain	What I Learned
+Compute Services	Lambda vs EC2 comparison, serverless benefits
+Serverless Value Prop	No server management, automatic scaling, pay-per-use
+AWS Global Infrastructure	Lambda runs across multiple Availability Zones
+Pricing Models	Pay per request + compute duration (GB-seconds)
+Security	IAM roles for Lambda execution permissions
+VPC	Connecting Lambda to private resources
+SNS	Notification services, email delivery
+CloudWatch	Monitoring, logging, metrics for serverless
+
+Lambda Facts to Memorize for Exam:
+Fact	Value
+Maximum execution time	15 minutes
+Maximum memory	10 GB
+Temporary storage (/tmp)	512 MB (default) to 10 GB
+Deployment package (console)	50 MB (zipped)
+Deployment package (S3)	250 MB (unzipped)
+Maximum layers	5 per function
+Free tier requests	1 million/month
+Free tier compute	400,000 GB-seconds/month
+
+When to Choose Lambda vs EC2:
+Use Lambda for...	Use EC2 for...
+Short-running (<15 min)	Long-running processes
+Irregular or low traffic	Predictable, constant load
+Event-driven tasks	Always-on applications
+Simple APIs/microservices	Complex, stateful applications
+Rapid development	Full OS control needed
+Common Errors and Solutions
+Error	Cause	Solution
+ModuleNotFoundError: No module named 'pymysql'	Layer not attached or incompatible	Verify layer added, runtime matches, architecture matches
+Timeout	Function can't reach database or runs too long	Check VPC, security groups, routing; increase timeout
+AccessDeniedException	Missing IAM permissions	Add required policies (SSM, SNS) to execution role
+Cannot find handler	Wrong handler format	Use filename.function_name format (no .py extension)
+No email received	Subscription not confirmed	Click confirmation link from AWS email
+Function stuck in VPC	Only 1 subnet selected	Add at least 2 subnets in different AZs
+Lambda cannot access internet	VPC mode removes default internet	Add NAT Gateway in public subnet
+Cost Analysis
+
+Monthly Cost Estimate for My Lab (26 invocations):
+Service	Usage	Cost
+Lambda requests	26 invocations	~$0.000005
+Lambda compute	6.5 GB-seconds	~$0.000108
+SNS	26 email deliveries	~$0.10
+CloudWatch Logs	1 MB storage	~$0.0005
+Parameter Store	4 parameters	$0.00 (free tier)
+TOTAL		~$0.10/month
+
+Traditional EC2 Alternative:
+
+    t2.micro running 24/7: $8.50/month
+
+    Savings with Lambda: 98.8%!
+
+Next Learning Goals
 
 Based on this lab, here's what I plan to learn next:
+Topic	Why It's Important
+API Gateway	Create REST APIs with Lambda backend
+Step Functions	Orchestrate multiple Lambda functions
+DynamoDB	Serverless database for Lambda apps
+S3 Event Triggers	Auto-process files when uploaded
+Lambda Power Tuning	Optimize memory vs cost vs speed
+Dead Letter Queues	Handle failed invocations with SQS
+Provisioned Concurrency	Eliminate cold starts for critical functions
+Infrastructure as Code	Deploy Lambda with CloudFormation/CDK
+Lambda Extensions	Add monitoring and observability tools
+Container Image Support	Deploy larger applications (10 GB limit)
+Resources Used
 
-| Topic | Why It's Important |
-|-------|---------------------|
-| Load Balancers | Distribute traffic across multiple instances |
-| Auto Scaling | Automatically adjust capacity based on demand |
-| IAM Roles Deep Dive | Advanced permission management |
-| S3 Integration | Store and retrieve files from Lambda |
-| CloudWatch Alarms | Proactive monitoring and alerting |
-| Step Functions | Orchestrate multiple Lambda functions |
-| API Gateway | Create REST APIs with Lambda backend |
-| DynamoDB | Serverless database for Lambda apps |
-| VPC Peering | Connect multiple VPCs securely |
-| Infrastructure as Code | Automate deployment with CloudFormation |
+    AWS Free Tier account
 
----
+    AWS Lambda console
 
-## Resources Used
+    AWS CloudWatch Events
 
-- AWS Free Tier account
-- AWS Lambda console
-- AWS CloudWatch Events
-- Amazon SNS
-- Systems Manager Parameter Store
-- PyMySQL library (via Lambda layer)
-- MariaDB database on EC2
+    Amazon SNS
 
----
+    Systems Manager Parameter Store
 
-## Final Reflection
+    PyMySQL library (via Lambda layer)
+
+    MariaDB database on EC2
+
+    Python 3.14 runtime
+
+    arm64 (Graviton) architecture
+
+Final Reflection
 
 This lab transformed my understanding of serverless computing. I learned that:
 
-**Serverless is not magic** - It requires careful VPC, IAM, and security group configuration. The trade-off for "no servers" is understanding AWS networking deeply.
+Serverless is not magic - It requires careful VPC, IAM, and security group configuration. The trade-off for "no servers" is understanding AWS networking deeply.
 
-**Layers solve real problems** - Without layers, packaging PyMySQL would have been frustrating. Now I see why teams use them for shared dependencies.
+Layers solve real problems - Without layers, packaging PyMySQL would have been frustrating. Now I see why teams use them for shared dependencies and faster deployments.
 
-**Event-driven architecture scales** - The pattern (CloudWatch Events → Lambda → SNS) works for billing alerts, security notifications, or business reports at any scale.
+Event-driven architecture scales - The pattern (CloudWatch Events → Lambda → SNS) works for billing alerts, security notifications, or business reports at any scale.
 
-**Testing is critical** - Lambda's stateless nature means each invocation is fresh. Testing with different event payloads caught permission issues before "production."
+Testing is critical - Lambda's stateless nature means each invocation is fresh. Testing with different event payloads caught permission issues before "production."
 
-**Cost awareness is a feature** - This solution costs $0.10/month vs $8.50 for EC2. Understanding serverless pricing is now a core skill.
+Cost awareness is a feature - This solution costs $0.10/month vs $8.50 for EC2. Understanding serverless pricing is now a core skill I can apply to any project.
 
----
+Cold starts are real - The first invocation after 15 minutes of idle time is noticeably slower. For production, I'd consider provisioned concurrency for latency-sensitive workloads.
 
-**Lab Status**: ✅ COMPLETED  
-**Date**: May 13, 2026  
-**Environment**: AWS us-west-2 (Oregon)  
-**Account ID**: 4963-2781-3604
-
----
-
-*"Serverless isn't about no servers. It's about not managing servers." - Anonymous AWS Engineer*
-
----
-
-This format matches your EC2 example exactly - each concept has its own numbered section, with images placed immediately after the relevant explanation. Would you like me to create similar documentation for your other labs (S3, VPC, DynamoDB, etc.)?# 🏅 Certs & Badges
-
-> Tracking certification progress, simulearns, and badges earned on my AWS cloud learning journey.
-
----
-
-## 📊 Progress Summary
-
-| Simulearn | Status | Started | Completed | Badge |
-|-----------|--------|---------|-----------|-------|
-| 1 – Cloud Foundations | ✅ Completed | May 15, 2026 | May 18, 2026 | 🏅 Earned |
-| 2 – File Systems in the Cloud | ✅ Completed | May 19, 2026 | May 20, 2026 | 🏅 Earned |
-| 3 – Networking Concepts | ✅ Completed | June 01, 2026 | June 02, 2026 | 🏅 Earned |
-
-**Total Badges Earned: 3 / 3**
-
----
-
-## 🎓 Simulearns
-
-### Simulearn 1 – Cloud Foundations
-
-| Status | Started | Completed |
-|--------|---------|-----------|
-| ✅ Completed | May 15, 2026 | May 18, 2026 |
-
-<details>
-<summary><strong>Topics Covered</strong></summary>
-
-| Topic | What I Learned |
-|-------|----------------|
-| AWS Global Infrastructure | Regions, Availability Zones, Edge Locations |
-| Compute Services | EC2 instance types, AMIs, instance lifecycle |
-| Storage Services | S3 storage classes, EBS volumes, object vs block storage |
-| Database Services | RDS, DynamoDB, Aurora comparisons |
-| Networking | VPC basics, subnets, security groups |
-| IAM | Users, groups, roles, policies, MFA |
-| Pricing Models | On-Demand, Reserved, Spot, Savings Plans |
-| Shared Responsibility Model | AWS vs customer security responsibilities |
-
-</details>
-
-<details>
-<summary><strong>Key Takeaways</strong></summary>
-
-| Takeaway | Why It Matters |
-|----------|----------------|
-| Choose region based on latency, cost, and compliance | Affects performance and legal requirements |
-| IAM least privilege principle | Only grant necessary permissions to reduce risk |
-| EC2 stop vs terminate | Stopped instances retain EBS volumes, terminated do not |
-| S3 is 11 nines durable | Designed for 99.999999999% durability |
-| Security groups are stateful | No need for separate inbound/outbound rules for return traffic |
-
-</details>
-
-🏅 **Badge Earned:** AWS Cloud Foundations — Issued May 18, 2026
-
----
-
-### Simulearn 2 – File Systems in the Cloud
-
-| Status | Started | Completed |
-|--------|---------|-----------|
-| ✅ Completed | May 19, 2026 | May 20, 2026 |
-
-<details>
-<summary><strong>Topics Covered</strong></summary>
-
-| Topic | What I Learned |
-|-------|----------------|
-| Amazon EFS | Serverless, elastic file system for Linux workloads |
-| EFS Storage Classes | Standard, Infrequent Access (IA), Archive |
-| Mount Targets | NFSv4 endpoints in each Availability Zone |
-| Security Groups | NFS port 2049 inbound rules |
-| EFS vs EBS | Shared vs block storage, multi-AZ vs single AZ |
-| amazon-efs-utils | AWS utilities for easier EFS mounting |
-| Lifecycle Management | Automatically move files between storage classes |
-| Performance Modes | General Purpose vs Max I/O |
-| Throughput Modes | Bursting vs Provisioned |
-
-</details>
-
-<details>
-<summary><strong>Key Takeaways</strong></summary>
-
-| Takeaway | Why It Matters |
-|----------|----------------|
-| EFS is shared storage | Multiple EC2 instances across AZs can access same files |
-| EFS grows automatically | No need to provision capacity in advance |
-| Mount targets per AZ | Each AZ needs its own mount target for EC2 access |
-| Security is critical | NFS port 2049 must be restricted to trusted sources |
-| amazon-efs-utils simplifies mounting | `mount -t efs` instead of standard NFS commands |
-
-</details>
-
-<details>
-<summary><strong>What I Did</strong></summary>
-
-- Created an EFS file system
-- Configured mount targets across three Availability Zones
-- Set up security groups with NFS inbound rules
-- Installed `amazon-efs-utils` on EC2 instances
-- Mounted EFS to multiple EC2 instances
-- Verified shared storage across all instances
-
-</details>
-
-<details>
-<summary><strong>Commands Used</strong></summary>
-
-```bash
-# Install EFS utilities
-sudo yum install -y amazon-efs-utils
-
-# Create mount directory
-mkdir /data
-
-# Mount EFS
-sudo mount -t efs fs-xxxxxxxxxxxxx:/ /data
-
-# Verify mount
-df -h | grep efs
-
-# Create test file
-sudo bash -c "echo 'Shared test content' > /data/test-file.log"
-
-# Verify on second instance
-cat /data/test-file.log
-```
-
-</details>
-
-🏅 **Badge Earned:** AWS File Systems — Issued May 20, 2026
-
----
-
-### Simulearn 3 – Networking Concepts
-
-| Status | Started | Completed |
-|--------|---------|-----------|
-| ✅ Completed | June 01, 2026 | June 02, 2026 |
-
-> **Certificate Issued by:** Michelle Vaz, Director, AWS Training & Certification  
-> **Awarded to:** Owen Lethabo
-
-<details>
-<summary><strong>Topics Covered</strong></summary>
-
-| Topic | What I Learned |
-|-------|----------------|
-| Virtual Private Cloud (VPC) | Logically isolated network in AWS |
-| Public Subnets | Subnets with route to Internet Gateway (`10.10.0.0/24`) |
-| Private Subnets | Subnets without Internet Gateway access (`10.10.2.0/24`) |
-| Internet Gateway | Enables internet access for public subnets |
-| Route Tables | Control traffic flow between subnets and internet |
-| Security Groups | Stateful firewalls controlling inbound/outbound traffic |
-| Inbound Rules | Control incoming traffic (HTTP port 80, MySQL port 3306) |
-| Outbound Rules | Control outgoing traffic from instances |
-| MySQL/Aurora Port 3306 | Database port requiring explicit security group rules |
-| Connection Validation | Testing cross-subnet connectivity on specific ports |
-| `0.0.0.0/0` CIDR | Allows all IP addresses (not recommended for production) |
-
-</details>
-
-<details>
-<summary><strong>Key Takeaways</strong></summary>
-
-| Takeaway | Why It Matters |
-|----------|----------------|
-| Security groups are stateful | Inbound allow automatically permits return outbound traffic |
-| Port 3306 must be explicitly allowed | DB server needs inbound rule from web server subnet |
-| Restrict source CIDRs | Use specific subnets instead of `0.0.0.0/0` |
-| Route tables determine subnet type | Public subnets have IGW route, private subnets do not |
-| Connection timeout = missing rule | Security group or route table issue |
-| Web server needs outbound to DB | Outbound rule on port 3306 to DB subnet |
-| DB server needs inbound from web | Inbound rule on port 3306 from web subnet |
-
-</details>
-
-<details>
-<summary><strong>What I Did</strong></summary>
-
-- Created a VPC with CIDR block `10.10.0.0/16`
-- Created public subnet (`10.10.0.0/24`) for web server
-- Created private subnet (`10.10.2.0/24`) for database server
-- Attached Internet Gateway to VPC
-- Configured public route table with `0.0.0.0/0 → IGW`
-- Associated public route table with web server subnet
-- Configured Web Server Security Group inbound rule: HTTP port 80 from `0.0.0.0/0`
-- Configured DB Server Security Group inbound rule: MySQL port 3306 from web subnet (`10.10.0.0/24`)
-- Configured Web Server Security Group outbound rule: MySQL port 3306 to DB subnet (`10.10.2.0/24`)
-- Verified connectivity between web server and database server
-- Troubleshot connection timeout errors by adjusting security group rules
-
-</details>
-
-<details>
-<summary><strong>Security Group Rules Configured</strong></summary>
-
-| Security Group | Type | Protocol | Port | Source / Destination |
-|----------------|------|----------|------|----------------------|
-| WebServerSecurityGroup | HTTP (Inbound) | TCP | 80 | `0.0.0.0/0` |
-| WebServerSecurityGroup | MySQL/Aurora (Outbound) | TCP | 3306 | `10.10.2.0/24` |
-| DBServerSecurityGroup | MySQL/Aurora (Inbound) | TCP | 3306 | `10.10.0.0/24` |
-
-</details>
-
-<details>
-<summary><strong>Route Table Configuration</strong></summary>
-
-| Destination | Target | Status | Purpose |
-|-------------|--------|--------|---------|
-| `10.10.0.0/16` | local | Active | Internal VPC routing |
-| `0.0.0.0/0` | `igw-0b13fa1473373ea51` | Active | Internet access for public subnet |
-
-</details>
-
-<details>
-<summary><strong>Commands Used</strong></summary>
-
-```bash
-# Verify security group rules (AWS CLI)
-aws ec2 describe-security-groups --group-ids sg-099a7817b4e1b6ece
-
-# Test connectivity from web server
-telnet 10.10.2.10 3306
-
-# Check route table associations
-aws ec2 describe-route-tables --route-table-ids rtb-0e07bee7158ed107d
-
-# View instances in each subnet
-aws ec2 describe-instances --filters "Name=vpc-id,Values=vpc-00a4c61dd6723a268"
-```
-
-
-*Last updated: June 02, 2026*
+Lab Status: ✅ COMPLETED
+Date: May 13, 2026
+Environment: AWS us-west-2 (Oregon)
+Function Name: salesAnalysisReportDataExtractor
+Runtime: Python 3.14 on arm64
