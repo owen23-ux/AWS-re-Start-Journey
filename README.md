@@ -1,54 +1,21 @@
 # My Cloud Journey – AWS re/Start
+Program Type: Hands-on Cloud Computing Certification Preparation
+Long-Term Goal: SOC Analyst (Security Operations Center)
 
-A personal learning repository tracking hands-on labs, certifications, and projects.
+📋 Program Overview
 
----
+This document outlines my structured 3-month journey to earn the AWS Certified Cloud Practitioner certification as the first step toward my long-term career goal of becoming a SOC Analyst.
+Rather than just studying theory, I am building real AWS infrastructure, documenting every lab, and developing security-focused cloud skills that directly translate to security operations roles.
 
-## About Me
+🎯 What This Program Is
 
-I am Owen Maake. An NQF Level 4 IT graduate. A SOC analyst in training. I hold AWS Cloud Practitioner, Azure Fundamentals (AZ-900), ISC2 CC, and SC-200. I built a home Kali Linux SOC lab and completed TryHackMe SOC Level 1 training.
+This is a project-based certification preparation program that combines cloud fundamentals with security operations readiness.
+Component	Focus	How It Helps My SOC Analyst Goal
+AWS Cloud Practitioner	Cloud concepts, services, pricing, security	Foundation for understanding cloud-based security incidents
+Hands-on labs	Practical implementation of AWS services	Understanding how attackers exploit misconfigurations
+Security-focused labs	IAM, CloudTrail, VPC security, encryption	Direct SOC skills (log analysis, access control, network monitoring)
+Documentation & GitHub	Evidence of skills for CV	Proves I understand security concepts hands-on
 
-Now I am adding AWS re/Start to my skills.
+The Key Difference: Most SOC analysts focus only on on-premises security. I am learning cloud security fundamentals that 90% of companies now need.
 
----
-
-## Repository Structure
-
-- **[Labs](./labs/)** — Hands-on practice across core technical domains
-  - [Compute](./labs/compute/)
-  - [Databases](./labs/databases/)
-  - [Networking](./labs/networking/)
-  - [Python](./labs/python/)
-- **[Certs & Badges](./certs-badges/)** — Simulearns and certification progress
-  - [Simulearn 1](./certs-badges/simulearn-1/)
-  - [Simulearn 2](./certs-badges/simulearn-2/)
-  - [Simulearn 3](./certs-badges/simulearn-3/)
-- **[Projects](./projects/)** — Personal builds and applied work
-
----
-
-## What I Already Have
-
-| Certification | Status |
-|---------------|--------|
-| AWS Cloud Practitioner | ✅ |
-| AWS AI Practitioner | ✅ |
-| Azure Fundamentals (AZ-900) | ✅ |
-| ISC2 CC | ✅ |
-| SC-200 | ✅ |
-
----
-
-## Goal
-
-Document everything I learn, build, and earn along the way.
-
-No copy-paste. Just my real experience.
-
----
-
-## Connect With Me
-
-- **GitHub:** github.com/owen23-ux
-- **LinkedIn:** linkedin.com/in/owen-maake-0b715a3a3
-- **Email:** owenlethabo28@gmail.com
+##STAY WITH ME I WILL BE UPDATING MY PROJECTS
