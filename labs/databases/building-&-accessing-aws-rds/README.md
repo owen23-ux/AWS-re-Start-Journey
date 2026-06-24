@@ -4,10 +4,6 @@
 
 This lab reinforced the concept of leveraging an AWS-managed database instance for solving relational database needs using Amazon Relational Database Service (Amazon RDS). I created a MySQL database, connected to it from a Linux server, and performed SQL operations including creating tables, inserting data, and joining tables.
 
-**Date Completed:** June 24, 2026
-
-**Duration:** ~45 minutes
-
 **Service:** Amazon RDS
 
 ---
