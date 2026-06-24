@@ -1,4 +1,4 @@
-# Building and accessing RDS
+# Build & Access AWS RDS Server
 
 ## Overview
 
