@@ -59,7 +59,7 @@ The restaurant owner can log in to an admin dashboard to view and confirm bookin
 ## Proposed AWS Architecture
 
 ```
-![Uploading aws_restaurant_architecture.png…]()
+![AWS Restaurant Architecture](aws_restaurant_architecture.png)
 ```
 
 ---
