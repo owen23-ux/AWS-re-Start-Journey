@@ -58,11 +58,7 @@ The restaurant owner can log in to an admin dashboard to view and confirm bookin
 
 ## Proposed AWS Architecture
 
-```
-![AWS Restaurant Architecture]
-(harvest-table-restaurant/aws_restaurant_architecture.png)
-![Step 1](screenshots/01-download-virtualbox.PNG)
-```
+![AWS Restaurant Architecture](harvest-table-restaurant/aws_restaurant_architecture.png)
 
 ---
 
