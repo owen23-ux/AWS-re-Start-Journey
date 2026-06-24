@@ -1,13 +1,8 @@
-```markdown
 # Challenge Lab: Query the World Database
 
 ## Lab Overview
 
 This lab reinforced SQL querying skills using a pre-configured MariaDB database called `world`. I connected to a Command Host instance and ran various SELECT statements to extract meaningful information from the `country`, `city`, and `countrylanguage` tables.
-
-**Date Completed:** June 24, 2026
-
-**Duration:** ~30 minutes
 
 **Database:** MariaDB (world database)
 
