@@ -1,4 +1,3 @@
-```markdown
 # 🏅 Certs & Badges
 
 > Tracking certification progress, simulearns, and badges earned on my AWS cloud learning journey.
@@ -12,8 +11,9 @@
 | 1 – Cloud Foundations | ✅ Completed | May 15, 2026 | May 18, 2026 | 🏅 Earned |
 | 2 – File Systems in the Cloud | ✅ Completed | May 19, 2026 | May 20, 2026 | 🏅 Earned |
 | 3 – Networking Concepts | ✅ Completed | June 01, 2026 | June 02, 2026 | 🏅 Earned |
+| 4 – Core Security Concepts (IAM) | ✅ Completed | June 11, 2026 | June 11, 2026 | 🏅 Earned |
 
-**Total Badges Earned: 3 / 3**
+**Total Badges Earned: 4 / 4**
 
 ---
 
@@ -76,6 +76,8 @@
 | EFS vs EBS | Shared vs block storage, multi-AZ vs single AZ |
 | amazon-efs-utils | AWS utilities for easier EFS mounting |
 | Lifecycle Management | Automatically move files between storage classes |
+| Performance Modes | General Purpose vs Max I/O |
+| Throughput Modes | Bursting vs Provisioned |
 
 </details>
 
