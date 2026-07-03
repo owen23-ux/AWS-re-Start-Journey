@@ -1,6 +1,6 @@
 # Simulearn 3 – Networking Concepts
 
-**Status:** ✅ Completed
+**Status:**  Completed
 **Started:** June 01, 2026
 **Completed:** June 02, 2026
 
@@ -16,7 +16,7 @@
 
 | Status | Started | Completed |
 |--------|---------|-----------|
-| ✅ Completed | June 2026 | June 02, 2026 |
+|  Completed | June 2026 | June 02, 2026 |
 
 ## Topics Covered
 
@@ -102,7 +102,7 @@ aws ec2 describe-route-tables --route-table-ids rtb-0e07bee7158ed107d
 # View instances in each subnet
 aws ec2 describe-instances --filters "Name=vpc-id,Values=vpc-00a4c61dd6723a268"# AWS SimuLearn: Networking Concepts
 
-**Status:** ✅ Completed  
+**Status:**  Completed  
 **Started:** June 01, 2026  
 **Completed:** June 02, 2026
 
