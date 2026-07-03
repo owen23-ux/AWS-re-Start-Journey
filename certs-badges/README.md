@@ -1,29 +1,29 @@
-# 🏅 Certs & Badges
+# Certs & Badges
 
 > Tracking certification progress, simulearns, and badges earned on my AWS cloud learning journey.
 
 ---
 
-## 📊 Progress Summary
+## Progress Summary
 
 | Simulearn | Status | Started | Completed | Badge |
 |-----------|--------|---------|-----------|-------|
-| 1 – Cloud Foundations | ✅ Completed | May 15, 2026 | May 18, 2026 | 🏅 Earned |
-| 2 – File Systems in the Cloud | ✅ Completed | May 19, 2026 | May 20, 2026 | 🏅 Earned |
-| 3 – Networking Concepts | ✅ Completed | June 01, 2026 | June 02, 2026 | 🏅 Earned |
-| 4 – Core Security Concepts (IAM) | ✅ Completed | June 11, 2026 | June 11, 2026 | 🏅 Earned |
+| 1 – Cloud Foundations | Completed | May 15, 2026 | May 18, 2026 | Earned |
+| 2 – File Systems in the Cloud | Completed | May 19, 2026 | May 20, 2026 | Earned |
+| 3 – Networking Concepts | Completed | June 01, 2026 | June 02, 2026 | Earned |
+| 4 – Core Security Concepts (IAM) | Completed | June 11, 2026 | June 11, 2026 | Earned |
 
 **Total Badges Earned: 4 / 4**
 
 ---
 
-## 🎓 Simulearns
+## Simulearns
 
 ### Simulearn 1 – Cloud Foundations
 
 | Status | Started | Completed |
 |--------|---------|-----------|
-| ✅ Completed | May 15, 2026 | May 18, 2026 |
+| Completed | May 15, 2026 | May 18, 2026 |
 
 <details>
 <summary><strong>Topics Covered</strong></summary>
@@ -54,7 +54,7 @@
 
 </details>
 
-🏅 **Badge Earned:** AWS Cloud Foundations — Issued May 18, 2026
+**Badge Earned:** AWS Cloud Foundations — Issued May 18, 2026
 
 ---
 
@@ -62,7 +62,7 @@
 
 | Status | Started | Completed |
 |--------|---------|-----------|
-| ✅ Completed | May 19, 2026 | May 20, 2026 |
+| Completed | May 19, 2026 | May 20, 2026 |
 
 <details>
 <summary><strong>Topics Covered</strong></summary>
@@ -93,7 +93,7 @@
 
 </details>
 
-🏅 **Badge Earned:** AWS File Systems — Issued May 20, 2026
+**Badge Earned:** AWS File Systems — Issued May 20, 2026
 
 ---
 
@@ -101,7 +101,7 @@
 
 | Status | Started | Completed |
 |--------|---------|-----------|
-| ✅ Completed | June 01, 2026 | June 02, 2026 |
+| Completed | June 01, 2026 | June 02, 2026 |
 
 > **Certificate Issued by:** Michelle Vaz, Director, AWS Training & Certification  
 > **Awarded to:** Owen Lethabo
@@ -132,7 +132,7 @@
 
 </details>
 
-🏅 **Badge Earned:** AWS Networking Concepts — Issued June 02, 2026
+**Badge Earned:** AWS Networking Concepts — Issued June 02, 2026
 
 ---
 
@@ -140,7 +140,7 @@
 
 | Status | Started | Completed |
 |--------|---------|-----------|
-| ✅ Completed | June 11, 2026 | June 11, 2026 |
+| Completed | June 11, 2026 | June 11, 2026 |
 
 > **Certificate Issued by:** Michelle Vaz, Director, AWS Training & Certification  
 > **Awarded to:** Owen Lethabo
@@ -150,14 +150,14 @@
 
 | Topic | What I Learned |
 |-------|----------------|
-| **IAM User Groups** | Logical containers for managing permissions for multiple users |
-| **IAM Users** | Individual identities representing people or applications |
-| **Managed Policies** | AWS-created permission sets (e.g., ReadOnlyAccess) |
-| **AmazonEC2ReadOnlyAccess** | Policy granting read-only access to EC2 resources |
-| **AmazonRDSReadOnlyAccess** | Policy granting read-only access to RDS databases |
-| **Least Privilege Principle** | Grant only the permissions needed for a specific job role |
-| **Policy Attachment** | Adding policies to user groups to grant permissions |
-| **IAM User Creation** | Creating users with console access and custom passwords |
+| IAM User Groups | Logical containers for managing permissions for multiple users |
+| IAM Users | Individual identities representing people or applications |
+| Managed Policies | AWS-created permission sets (e.g., ReadOnlyAccess) |
+| AmazonEC2ReadOnlyAccess | Policy granting read-only access to EC2 resources |
+| AmazonRDSReadOnlyAccess | Policy granting read-only access to RDS databases |
+| Least Privilege Principle | Grant only the permissions needed for a specific job role |
+| Policy Attachment | Adding policies to user groups to grant permissions |
+| IAM User Creation | Creating users with console access and custom passwords |
 
 </details>
 
@@ -166,11 +166,11 @@
 
 | Takeaway | Why It Matters |
 |----------|----------------|
-| **Use groups, not individual user policies** | Managing permissions at group level is more scalable |
-| **ReadOnlyAccess is not full access** | Support engineers can view but not modify resources |
-| **Multiple policies per group** | SupportEngineers group needed both EC2 and RDS read access |
-| **IAM users belong to groups** | User was added to SupportEngineers group |
-| **Tags help organise users** | `job-title: Support Engineer` identifies user's role |
+| Use groups, not individual user policies | Managing permissions at group level is more scalable |
+| ReadOnlyAccess is not full access | Support engineers can view but not modify resources |
+| Multiple policies per group | SupportEngineers group needed both EC2 and RDS read access |
+| IAM users belong to groups | User was added to SupportEngineers group |
+| Tags help organise users | `job-title: Support Engineer` identifies user's role |
 
 </details>
 
@@ -234,22 +234,22 @@ aws iam get-group --group-name SupportEngineers
 
 </details>
 
-🏅 **Badge Earned:** AWS Core Security Concepts — Issued June 11, 2026
+**Badge Earned:** AWS Core Security Concepts — Issued June 11, 2026
 
 ---
 
-## 🎖️ Earned Badges
+## Earned Badges
 
 | Badge | Date Earned | Issuer |
 |-------|-------------|--------|
-| 🏅 AWS Cloud Foundations | May 18, 2026 | AWS Training & Certification |
-| 🏅 AWS File Systems | May 20, 2026 | AWS Training & Certification |
-| 🏅 AWS Networking Concepts | June 02, 2026 | AWS Training & Certification |
-| 🏅 AWS Core Security Concepts (IAM) | June 11, 2026 | AWS Training & Certification |
+| AWS Cloud Foundations | May 18, 2026 | AWS Training & Certification |
+| AWS File Systems | May 20, 2026 | AWS Training & Certification |
+| AWS Networking Concepts | June 02, 2026 | AWS Training & Certification |
+| AWS Core Security Concepts (IAM) | June 11, 2026 | AWS Training & Certification |
 
 ---
 
-## 📜 Completion Certificates
+## Completion Certificates
 
 | Course | Awarded To | Date Completed | Issued By |
 |--------|------------|----------------|-----------|
@@ -260,7 +260,7 @@ aws iam get-group --group-name SupportEngineers
 
 ---
 
-## 🗺️ What's Next
+## What's Next
 
 - [x] Simulearn 1 – Cloud Foundations
 - [x] Simulearn 2 – File Systems in the Cloud
@@ -270,4 +270,5 @@ aws iam get-group --group-name SupportEngineers
 - [ ] Simulearn 6 – Security Best Practices *(Coming Soon)*
 
 ---
+
 ```
