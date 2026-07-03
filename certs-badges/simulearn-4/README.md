@@ -1,6 +1,6 @@
 # AWS SimuLearn: Core Security Concepts (IAM)
 
-**Status:** ✅ Completed  
+**Status:**  Completed  
 **Started:** June 11, 2026  
 **Completed:** June 11, 2026
 
@@ -22,7 +22,7 @@
 
 | Status | Started | Completed |
 |--------|---------|-----------|
-| ✅ Completed | June 2026 | June 11, 2026 |
+|  Completed | June 2026 | June 11, 2026 |
 
 ---
 
@@ -138,7 +138,7 @@
 | Setting | Value |
 |---------|-------|
 | User Name | `support-engineer-1` |
-| Console Access | ✅ Enabled |
+| Console Access |  Enabled |
 | Password Type | Custom password |
 
 ---
@@ -305,7 +305,7 @@ aws iam get-group --group-name SupportEngineers
 
 ---
 
-## Lab Status: ✅ COMPLETED
+## Lab Status:  COMPLETED
 
 **Date:** June 11, 2026
 
