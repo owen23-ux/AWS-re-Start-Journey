@@ -1,3 +1,4 @@
+```markdown
 # 🏅 Certs & Badges
 
 > Tracking certification progress, simulearns, and badges earned on my AWS cloud learning journey.
@@ -75,8 +76,6 @@
 | EFS vs EBS | Shared vs block storage, multi-AZ vs single AZ |
 | amazon-efs-utils | AWS utilities for easier EFS mounting |
 | Lifecycle Management | Automatically move files between storage classes |
-| Performance Modes | General Purpose vs Max I/O |
-| Throughput Modes | Bursting vs Provisioned |
 
 </details>
 
@@ -89,44 +88,6 @@
 | EFS grows automatically | No need to provision capacity in advance |
 | Mount targets per AZ | Each AZ needs its own mount target for EC2 access |
 | Security is critical | NFS port 2049 must be restricted to trusted sources |
-| amazon-efs-utils simplifies mounting | `mount -t efs` instead of standard NFS commands |
-
-</details>
-
-<details>
-<summary><strong>What I Did</strong></summary>
-
-- Created an EFS file system
-- Configured mount targets across three Availability Zones
-- Set up security groups with NFS inbound rules
-- Installed `amazon-efs-utils` on EC2 instances
-- Mounted EFS to multiple EC2 instances
-- Verified shared storage across all instances
-
-</details>
-
-<details>
-<summary><strong>Commands Used</strong></summary>
-
-```bash
-# Install EFS utilities
-sudo yum install -y amazon-efs-utils
-
-# Create mount directory
-mkdir /data
-
-# Mount EFS
-sudo mount -t efs fs-xxxxxxxxxxxxx:/ /data
-
-# Verify mount
-df -h | grep efs
-
-# Create test file
-sudo bash -c "echo 'Shared test content' > /data/test-file.log"
-
-# Verify on second instance
-cat /data/test-file.log
-```
 
 </details>
 
@@ -154,11 +115,6 @@ cat /data/test-file.log
 | Internet Gateway | Enables internet access for public subnets |
 | Route Tables | Control traffic flow between subnets and internet |
 | Security Groups | Stateful firewalls controlling inbound/outbound traffic |
-| Inbound Rules | Control incoming traffic (HTTP port 80, MySQL port 3306) |
-| Outbound Rules | Control outgoing traffic from instances |
-| MySQL/Aurora Port 3306 | Database port requiring explicit security group rules |
-| Connection Validation | Testing cross-subnet connectivity on specific ports |
-| `0.0.0.0/0` CIDR | Allows all IP addresses (not recommended for production) |
 
 </details>
 
@@ -171,47 +127,94 @@ cat /data/test-file.log
 | Port 3306 must be explicitly allowed | DB server needs inbound rule from web server subnet |
 | Restrict source CIDRs | Use specific subnets instead of `0.0.0.0/0` |
 | Route tables determine subnet type | Public subnets have IGW route, private subnets do not |
-| Connection timeout = missing rule | Security group or route table issue |
-| Web server needs outbound to DB | Outbound rule on port 3306 to DB subnet |
-| DB server needs inbound from web | Inbound rule on port 3306 from web subnet |
+
+</details>
+
+🏅 **Badge Earned:** AWS Networking Concepts — Issued June 02, 2026
+
+---
+
+### Simulearn 4 – Core Security Concepts (IAM)
+
+| Status | Started | Completed |
+|--------|---------|-----------|
+| ✅ Completed | June 11, 2026 | June 11, 2026 |
+
+> **Certificate Issued by:** Michelle Vaz, Director, AWS Training & Certification  
+> **Awarded to:** Owen Lethabo
+
+<details>
+<summary><strong>Topics Covered</strong></summary>
+
+| Topic | What I Learned |
+|-------|----------------|
+| **IAM User Groups** | Logical containers for managing permissions for multiple users |
+| **IAM Users** | Individual identities representing people or applications |
+| **Managed Policies** | AWS-created permission sets (e.g., ReadOnlyAccess) |
+| **AmazonEC2ReadOnlyAccess** | Policy granting read-only access to EC2 resources |
+| **AmazonRDSReadOnlyAccess** | Policy granting read-only access to RDS databases |
+| **Least Privilege Principle** | Grant only the permissions needed for a specific job role |
+| **Policy Attachment** | Adding policies to user groups to grant permissions |
+| **IAM User Creation** | Creating users with console access and custom passwords |
+
+</details>
+
+<details>
+<summary><strong>Key Takeaways</strong></summary>
+
+| Takeaway | Why It Matters |
+|----------|----------------|
+| **Use groups, not individual user policies** | Managing permissions at group level is more scalable |
+| **ReadOnlyAccess is not full access** | Support engineers can view but not modify resources |
+| **Multiple policies per group** | SupportEngineers group needed both EC2 and RDS read access |
+| **IAM users belong to groups** | User was added to SupportEngineers group |
+| **Tags help organise users** | `job-title: Support Engineer` identifies user's role |
 
 </details>
 
 <details>
 <summary><strong>What I Did</strong></summary>
 
-- Created a VPC with CIDR block `10.10.0.0/16`
-- Created public subnet (`10.10.0.0/24`) for web server
-- Created private subnet (`10.10.2.0/24`) for database server
-- Attached Internet Gateway to VPC
-- Configured public route table with `0.0.0.0/0 → IGW`
-- Associated public route table with web server subnet
-- Configured Web Server Security Group inbound rule: HTTP port 80 from `0.0.0.0/0`
-- Configured DB Server Security Group inbound rule: MySQL port 3306 from web subnet (`10.10.0.0/24`)
-- Configured Web Server Security Group outbound rule: MySQL port 3306 to DB subnet (`10.10.2.0/24`)
-- Verified connectivity between web server and database server
-- Troubleshot connection timeout errors by adjusting security group rules
+| Step | Action |
+|------|--------|
+| 1 | Created IAM user group named `SupportEngineers` |
+| 2 | Attached `AmazonEC2ReadOnlyAccess` policy to the group |
+| 3 | Attached `AmazonRDSReadOnlyAccess` policy to the group |
+| 4 | Created IAM user `support-engineer-1` with custom console password |
+| 5 | Added the user to the `SupportEngineers` group |
+| 6 | Added tag `job-title: Support Engineer` to the user |
+| 7 | Verified the group had both ReadOnly policies attached |
 
 </details>
 
 <details>
-<summary><strong>Security Group Rules Configured</strong></summary>
+<summary><strong>IAM Architecture Diagram</strong></summary>
 
-| Security Group | Type | Protocol | Port | Source / Destination |
-|----------------|------|----------|------|----------------------|
-| WebServerSecurityGroup | HTTP (Inbound) | TCP | 80 | `0.0.0.0/0` |
-| WebServerSecurityGroup | MySQL/Aurora (Outbound) | TCP | 3306 | `10.10.2.0/24` |
-| DBServerSecurityGroup | MySQL/Aurora (Inbound) | TCP | 3306 | `10.10.0.0/24` |
-
-</details>
-
-<details>
-<summary><strong>Route Table Configuration</strong></summary>
-
-| Destination | Target | Status | Purpose |
-|-------------|--------|--------|---------|
-| `10.10.0.0/16` | local | Active | Internal VPC routing |
-| `0.0.0.0/0` | `igw-0b13fa1473373ea51` | Active | Internet access for public subnet |
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         AWS Account                             │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │                   IAM User Group                          │  │
+│  │                  SupportEngineers                         │  │
+│  │  ┌─────────────────────────────────────────────────────┐  │  │
+│  │  │              Managed Policies                       │  │  │
+│  │  │  ┌─────────────────────┐ ┌─────────────────────┐   │  │  │
+│  │  │  │ AmazonEC2           │ │ AmazonRDS           │   │  │  │
+│  │  │  │ ReadOnlyAccess      │ │ ReadOnlyAccess      │   │  │  │
+│  │  │  └─────────────────────┘ └─────────────────────┘   │  │  │
+│  │  └─────────────────────────────────────────────────────┘  │  │
+│  │                           │                                │  │
+│  │                           ▼                                │  │
+│  │  ┌─────────────────────────────────────────────────────┐  │  │
+│  │  │                   IAM Users                         │  │  │
+│  │  │  ┌─────────────────────────────────────────────┐    │  │  │
+│  │  │  │         support-engineer-1                  │    │  │  │
+│  │  │  │         job-title: Support Engineer         │    │  │  │
+│  │  │  └─────────────────────────────────────────────┘    │  │  │
+│  │  └─────────────────────────────────────────────────────┘  │  │
+│  └───────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+```
 
 </details>
 
@@ -219,22 +222,17 @@ cat /data/test-file.log
 <summary><strong>Commands Used</strong></summary>
 
 ```bash
-# Verify security group rules (AWS CLI)
-aws ec2 describe-security-groups --group-ids sg-099a7817b4e1b6ece
+# List IAM groups and attached policies
+aws iam list-groups
+aws iam list-attached-group-policies --group-name SupportEngineers
 
-# Test connectivity from web server
-telnet 10.10.2.10 3306
-
-# Check route table associations
-aws ec2 describe-route-tables --route-table-ids rtb-0e07bee7158ed107d
-
-# View instances in each subnet
-aws ec2 describe-instances --filters "Name=vpc-id,Values=vpc-00a4c61dd6723a268"
+# List IAM users in a group
+aws iam get-group --group-name SupportEngineers
 ```
 
 </details>
 
-🏅 **Badge Earned:** AWS Networking Concepts — Issued June 02, 2026
+🏅 **Badge Earned:** AWS Core Security Concepts — Issued June 11, 2026
 
 ---
 
@@ -245,6 +243,7 @@ aws ec2 describe-instances --filters "Name=vpc-id,Values=vpc-00a4c61dd6723a268"
 | 🏅 AWS Cloud Foundations | May 18, 2026 | AWS Training & Certification |
 | 🏅 AWS File Systems | May 20, 2026 | AWS Training & Certification |
 | 🏅 AWS Networking Concepts | June 02, 2026 | AWS Training & Certification |
+| 🏅 AWS Core Security Concepts (IAM) | June 11, 2026 | AWS Training & Certification |
 
 ---
 
@@ -255,24 +254,18 @@ aws ec2 describe-instances --filters "Name=vpc-id,Values=vpc-00a4c61dd6723a268"
 | Simulearn 1 – Cloud Foundations | Owen Lethabo | May 18, 2026 | AWS Training & Certification |
 | Simulearn 2 – File Systems in the Cloud | Owen Lethabo | May 20, 2026 | AWS Training & Certification |
 | Simulearn 3 – Networking Concepts | Owen Lethabo | June 02, 2026 | Michelle Vaz, Director, AWS T&C |
-
----
-
-## 🔗 Course Links
-
-| Simulearn | Link |
-|-----------|------|
-| Simulearn 1 – Cloud Foundations | [Access Course](https://aws.amazon.com/training/digital/aws-simulearn/) |
-| Simulearn 2 – File Systems in the Cloud | [Access Course](https://www.classcentral.com/course/aws-simulearn-file-systems-in-the-cloud-299068) |
-| Simulearn 3 – Networking Concepts | [Access Course](https://aws.amazon.com/training/digital/aws-simulearn/) |
+| Simulearn 4 – Core Security Concepts (IAM) | Owen Lethabo | June 11, 2026 | Michelle Vaz, Director, AWS T&C |
 
 ---
 
 ## 🗺️ What's Next
 
-- [ ] Simulearn 4 – Security Best Practices *(Coming Soon)*
+- [x] Simulearn 1 – Cloud Foundations
+- [x] Simulearn 2 – File Systems in the Cloud
+- [x] Simulearn 3 – Networking Concepts
+- [x] Simulearn 4 – Core Security Concepts (IAM)
 - [ ] Simulearn 5 – Database Services *(Coming Soon)*
+- [ ] Simulearn 6 – Security Best Practices *(Coming Soon)*
 
 ---
-
-*Last updated: June 02, 2026*
+```
