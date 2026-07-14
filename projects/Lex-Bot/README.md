@@ -1,4 +1,4 @@
-# ID-Please – Cognito Bot
+# ID-Please – Cognito Quiz Bot
 
 ## Project Overview
 
@@ -231,7 +231,7 @@ Bot: "Congratulations! You have completed the quiz! Great job!"
 │  ├─────────────┬─────────────┬─────────────┬───────────────────────────┤  │
 │  │  AnswerOne  │  AnswerTwo  │   Answer3   │    YesNoType              │  │
 │  │  Ready42    │             │             │                           │  │
-│  └─────────────┴─────────────┴─────────────┴───────────────────────────┘  │
+│  └───────────────────────────────────────────────────────────────────────┘  │
 │                                    │                                       │
 │  ┌───────────────────────────────────────────────────────────────────────┐  │
 │  │                      Conditional Branching                           │  │
@@ -334,21 +334,27 @@ We chose AWS Cognito because it is the backbone of modern cloud identity managem
 
 ### Bot Testing
 
-![Bot Testing](testing.png)
+![Bot Testing](projects/Lex-Bot/screenshots/testing.png)
 
 *Figure 1: Testing the ID-Please bot in Amazon Lex console*
 
 ### Intents
 
-![Intents](intents.png)
+![Intents](projects/Lex-Bot/screenshots/intents.png)
 
 *Figure 2: List of 7 intents defined in the bot*
 
 ### Slot Types
 
-![Slot Types](slots.png)
+![Slot Types](projects/Lex-Bot/screenshots/slots.png)
 
 *Figure 3: Custom slot types (QuizAnswers, ServiceList)*
+
+### Bot Details
+
+![Bot Details](projects/Lex-Bot/screenshots/id-please.png)
+
+*Figure 4: Bot details showing Mr-ID-Please*
 
 ---
 
