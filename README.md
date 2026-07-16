@@ -1,135 +1,112 @@
-# AWS re/Start – Cloud & Security Portfolio
+#  AWS re/Start Portfolio – Owen Maake
 
-## Overview
+##  Overview
 
-This repository documents my complete AWS re/Start journey – a 12-week workforce development program that transformed my understanding of cloud computing, security, and infrastructure operations. It represents a shift from traditional IT support to cloud-native operations and security.
+This repository contains all my work, notes, and hands-on labs completed during the AWS re/Start program.
 
----
+It is designed to give a full view of my cloud learning journey — from foundational concepts to hands-on implementation using AWS services.
 
-## About AWS re/Start
+This portfolio is ideal for:
 
-AWS re/Start is a full-time, cohort-based training program that prepares individuals for entry-level cloud roles. The curriculum combines instructor-led training with hands-on labs, real-world scenarios, and exam preparation for the AWS Certified Cloud Practitioner certification.
-
----
-
-## Program Structure
-
-The program covered the following modules:
-
-| Module | Focus Area |
-|--------|------------|
-| Professional Skills | Communication, teamwork, and workplace readiness |
-| Cloud Foundations | Cloud concepts, AWS global infrastructure, and core services |
-| Linux | System administration, command-line operations, and scripting |
-| Networking | VPC, subnets, routing, security groups, and hybrid connectivity |
-| Security | IAM, encryption, compliance, and security best practices |
-| Python Programming | Scripting for automation and data processing |
-| Databases | RDS, DynamoDB, and SQL fundamentals |
-| AWS Architecture | Well-Architected Framework, high availability, and scalability |
-| Systems Operations | Monitoring, logging, and incident response |
-| Tooling and Automation | Infrastructure as Code (CloudFormation), CI/CD |
-| Servers | EC2, Elastic Load Balancing, and Auto Scaling |
-| Scaling and Name Resolution | Route 53, scaling strategies |
-| Serverless and Containers | Lambda, API Gateway, ECS, ECR |
-| AWS Database Services | RDS, Aurora, DynamoDB, ElastiCache |
-| AWS Networking Services | VPC, Direct Connect, VPN, Transit Gateway |
-| Storage and Archiving | S3, EBS, EFS, Glacier |
-| Monitoring and Security | CloudWatch, CloudTrail, GuardDuty, Inspector |
-| Managing Resource Consumption | Cost optimisation, Trusted Advisor |
-| Automated and Repeatable Deployments | CloudFormation, Elastic Beanstalk |
-| AWS Machine Learning and Generative AI | AI services, SageMaker, Bedrock |
+- Recruiters
+- Hiring managers
+- Anyone interested in my cloud and security journey
 
 ---
 
-## What I Built and Learned
+##  About Me
 
-Throughout the program, I gained hands-on experience with:
+Hi, I'm Owen 
 
-- **EC2** – Launching, securing, and managing virtual servers
-- **VPC** – Designing isolated networks with public and private subnets
-- **IAM** – Implementing least privilege access and secure identity management
-- **Lambda** – Building serverless functions triggered by events
-- **S3** – Configuring storage with versioning, lifecycle, and encryption
-- **RDS** – Deploying and securing relational databases
-- **CloudWatch** – Monitoring resources and setting up alarms
-- **CloudTrail** – Auditing API activity and tracking user actions
-- **Inspector** – Scanning for vulnerabilities and network exposure
-- **Python** – Writing scripts to automate cloud tasks
-- **SNS** – Configuring email and SMS notifications
-- **Auto Scaling** – Ensuring application availability and elasticity
-- **Load Balancers** – Distributing traffic across multiple instances
+I am an IT and Computer Science graduate transitioning into cloud computing and cybersecurity through the AWS re/Start program. With a strong interest in SOC operations and Blue Team security, I am building the skills needed to protect and defend cloud environments. This repository reflects my growth, consistency, and commitment to building a career in cloud and security.
 
 ---
 
-## How This Helped Me Understand Cloud Services
+##  Repository Structure
 
-Before AWS re/Start, cloud was an abstract concept. Now I understand it at a practical level.
+This repository is organized into different sections to make it easy to navigate:
 
-- **How services work together** – I learned how EC2, VPC, S3, IAM, and Lambda integrate to form complete solutions.
-- **Why architecture matters** – A poorly designed VPC can expose resources. I learned to design with security in mind from the start.
-- **Hands-on builds** – Reading about cloud is not enough. Building, breaking, and fixing is where real understanding happens.
-- **Security is embedded** – I learned that security is not an add-on. It is built into every service – IAM policies, security groups, encryption, and logging.
+###  Labs & Hands-On Practice
 
----
+- Step-by-step lab exercises
+- AWS service configurations
+- Console-based practice work
+- Screenshots and explanations
 
-## How I Use Tools to Protect Cloud Services (Blue Team Perspective)
+###  Projects & Assignments
 
-As someone training for a Blue Team role, AWS re/Start gave me the tools to protect cloud environments:
+- AWS-based solutions built during training
+- Problem-solving exercises
+- Serverless applications and chatbot development
 
-| **Tool / Service** | **How I Use It to Protect** |
-|--------------------|-----------------------------|
-| **IAM** | Enforce least privilege – users and services only get what they need |
-| **Security Groups** | Control inbound/outbound traffic – block unauthorised access |
-| **CloudTrail** | Track who did what and when – audit trail for investigations |
-| **CloudWatch** | Monitor metrics and set alarms – detect anomalies in real time |
-| **GuardDuty** | Continuously scan for threats – unauthorised access, suspicious activity |
-| **Inspector** | Identify vulnerabilities – scan EC2 and Lambda for weaknesses |
-| **S3 Bucket Policies** | Prevent public exposure – ensure data is not accidentally leaked |
-| **VPC** | Isolate resources – keep databases private, web servers public |
-| **AWS Config** | Track configuration changes – detect drift from secure baselines |
-| **Trusted Advisor** | Get security recommendations – fix weaknesses before attackers find them |
+###  Certificates
 
-**My Mindset:**
-I approach every AWS service with a defender's mindset. I ask:
-- What could go wrong if this is misconfigured?
-- Who should have access and who should not?
-- How do I detect if someone tries to exploit this?
+This section highlights the certifications and achievements I have earned during my learning journey.
 
-This program gave me the foundation to think like an attacker and defend like a Blue Team analyst.
+-  AWS Cloud Practitioner (In Progress)
+-  AWS AI Practitioner (Completed)
+-  Microsoft Azure Fundamentals (AZ-900) (Completed)
+
+These certifications validate my understanding of cloud concepts, AWS services, billing, security, and best practices.
 
 ---
 
-## How This Portfolio Sells Me
+##  Skills Demonstrated
 
-| **Skill** | **Value to Employers** |
-|-----------|------------------------|
-| **Cloud Fundamentals** | Understands AWS core services, pricing, and global infrastructure |
-| **Security** | Can secure cloud environments with IAM, encryption, and monitoring |
-| **Hands-On Experience** | Built real labs – not just theory |
-| **Automation** | Uses Python, CloudFormation, and CLI for repeatable deployments |
-| **Networking** | Can design secure VPCs with public/private subnets and routing |
-| **Serverless** | Knows Lambda, SNS, and event-driven architectures |
-| **Linux** | Comfortable with command-line administration |
-| **Professional Skills** | Teamwork, communication, and problem-solving ready for the workplace |
-| **Certification Ready** | Prepared for AWS Certified Cloud Practitioner exam |
+Through this repository, I demonstrate:
+
+- Understanding of cloud computing concepts
+- Knowledge of AWS core services (EC2, VPC, S3, IAM, Lambda, RDS)
+- Basic cloud architecture and networking principles
+- Hands-on experience with AWS security tools
+- Problem-solving using cloud solutions
+- Blue Team security mindset
 
 ---
 
-## Why This Matters
+##  Key Learning Areas
 
-I am a College IT & Computer Science graduate training to become a SOC Analyst. Cloud is not optional – it is where the world is going. This program gave me the foundation to investigate threats, secure cloud environments, and build infrastructure with confidence.
+- Cloud fundamentals (compute, storage, networking, databases)
+- Security and Shared Responsibility Model
+- Identity and Access Management (IAM)
+- Pricing, billing, and cost management
+- High availability and scalability
+- AWS global infrastructure
+- Serverless and container services (Lambda, ECS, ECR)
+- Monitoring and logging (CloudWatch, CloudTrail)
+- Vulnerability management (GuardDuty, Inspector)
 
 ---
 
-## Certifications
+##  Purpose of This Repository
 
-| Certification | Status |
-|---------------|--------|
-| AWS AI Practitioner | ✅ Completed |
-| Microsoft Azure Fundamentals (AZ-900) | ✅ Completed |
-| AWS Cloud Practitioner | Studying |
-| ISC2 CC | In Progress |
-| CompTIA Security+ | In Progress |
+The purpose of this portfolio is to:
+
+- Track my progress in cloud computing and security
+- Showcase my skills and hands-on experience
+- Provide proof of practical lab work and projects
+- Demonstrate readiness for AWS certification and job opportunities
+- Highlight my commitment to a career in cloud security
+
+---
+
+## 🔮 Future Improvements
+
+- Add more advanced security-focused projects
+- Include real-world cloud solutions and architecture diagrams
+- Build cloud-based SOC monitoring projects
+- Deepen knowledge of AWS security services
+- Continue updating as I grow in my cloud and security career
+
+---
+
+##  Final Note
+
+This repository represents my journey from IT graduate to cloud practitioner with a security focus. It shows not only what I have learned, but also my dedication to continuous learning and improvement in the cloud and cybersecurity industry.
+
+---
+
+**Thank you for taking the time to explore my AWS re/Start portfolio.**
 
 ---
 
@@ -138,17 +115,3 @@ I am a College IT & Computer Science graduate training to become a SOC Analyst. 
 - **GitHub:** github.com/owen23-ux
 - **LinkedIn:** linkedin.com/in/owen-maake-0b715a3a3
 - **Email:** owenlethabo28@gmail.com
-
----
-
-## Conclusion
-
-AWS re/Start bridged the gap between my IT background and cloud operations. It gave me the confidence to build, secure, and troubleshoot cloud infrastructure. I am now ready to contribute to any cloud or security team – and this repository proves it.
-
----
-
-> *"I don't just learn cloud. I build it, secure it, and automate it."*
-
----
-
-**License:** MIT
