@@ -43,9 +43,11 @@ This repository is organized into different sections to make it easy to navigate
 
 This section highlights the certifications and achievements I have earned during my learning journey.
 
--  AWS Cloud Practitioner (In Progress)
--  AWS AI Practitioner (Completed)
 -  Microsoft Azure Fundamentals (AZ-900) (Completed)
+-  Microsoft Azure Fundamentals (SC-900) (Planned)
+-  AWS Cloud Practitioner (In Progress)
+-  ISC2 CC (Planned)
+-  Comptia Security+ (Planned)
 
 These certifications validate my understanding of cloud concepts, AWS services, billing, security, and best practices.
 
@@ -90,7 +92,7 @@ The purpose of this portfolio is to:
 
 ---
 
-## 🔮 Future Improvements
+##  Future Improvements
 
 - Add more advanced security-focused projects
 - Include real-world cloud solutions and architecture diagrams
