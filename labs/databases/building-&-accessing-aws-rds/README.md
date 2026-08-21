@@ -1,10 +1,16 @@
 # Build & Access AWS RDS Server
 
+**Date Completed:** June 24, 2026
+
+**Service:** Amazon RDS (Relational Database Service)
+
+**Database Engine:** MySQL
+
+---
+
 ## Overview
 
 This lab reinforced the concept of leveraging an AWS-managed database instance for solving relational database needs using Amazon Relational Database Service (Amazon RDS). I created a MySQL database, connected to it from a Linux server, and performed SQL operations including creating tables, inserting data, and joining tables.
-
-**Service:** Amazon RDS
 
 ---
 
@@ -68,7 +74,7 @@ CREATE TABLE RESTART (
 );
 ```
 
-**Screenshot: Table RESTART created** ✅
+**Screenshot: Table RESTART created** 
 
 ---
 
@@ -88,7 +94,7 @@ INSERT INTO RESTART VALUES
 (10, 'Kgomotso Molefe', 'Cape Town', '2026-07-31 00:00:00');
 ```
 
-**Screenshot: 10 rows inserted into RESTART** ✅
+**Screenshot: 10 rows inserted into RESTART** 
 
 ---
 
@@ -98,7 +104,7 @@ INSERT INTO RESTART VALUES
 SELECT * FROM RESTART;
 ```
 
-**Screenshot: All rows from RESTART** ✅
+**Screenshot: All rows from RESTART** 
 
 ---
 
@@ -111,7 +117,7 @@ CREATE TABLE CLOUD_PRACTITIONER (
 );
 ```
 
-**Screenshot: Table CLOUD_PRACTITIONER created** ✅
+**Screenshot: Table CLOUD_PRACTITIONER created** 
 
 ---
 
@@ -126,7 +132,7 @@ INSERT INTO CLOUD_PRACTITIONER VALUES
 (9, '2026-08-15 00:00:00');
 ```
 
-**Screenshot: 5 rows inserted into CLOUD_PRACTITIONER** ✅
+**Screenshot: 5 rows inserted into CLOUD_PRACTITIONER** 
 
 ---
 
@@ -136,7 +142,7 @@ INSERT INTO CLOUD_PRACTITIONER VALUES
 SELECT * FROM CLOUD_PRACTITIONER;
 ```
 
-**Screenshot: All rows from CLOUD_PRACTITIONER** ✅
+**Screenshot: All rows from CLOUD_PRACTITIONER** 
 
 ---
 
@@ -162,7 +168,7 @@ ON RESTART.Student_ID = CLOUD_PRACTITIONER.Student_ID;
 | 5 | Aisha Khan | 2026-09-01 00:00:00 |
 | 9 | Ruan Botha | 2026-08-15 00:00:00 |
 
-**Screenshot: Inner join result** ✅
+**Screenshot: Inner join result** 
 
 ---
 
@@ -181,12 +187,8 @@ ON RESTART.Student_ID = CLOUD_PRACTITIONER.Student_ID;
 
 ---
 
-## Lab Status: ✅ COMPLETED
+## Lab Status
 
-**Date:** June 24, 2026
-
-**Database Engine:** MySQL
-
-**Environment:** AWS Lab VPC
+Completed. Environment: AWS Lab VPC.
 
 ---
