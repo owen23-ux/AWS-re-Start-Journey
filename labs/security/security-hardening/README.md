@@ -1,4 +1,6 @@
-# 🛠️ AWS Systems Manager: Patch Manager & Fleet Management
+# AWS Systems Manager: Patch Manager & Fleet Management
+
+**Date Completed:** _add date_
 
 **Time Spent:** 1 hour
 
@@ -398,7 +400,7 @@ This lab transformed my understanding of automated operations and patch manageme
 
 ---
 
-## Lab Status: ✅ COMPLETED
+## Lab Status:  COMPLETED
 
 **Environment:** AWS us-west-2 (Oregon)
 
