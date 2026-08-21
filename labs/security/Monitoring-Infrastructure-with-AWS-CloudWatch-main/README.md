@@ -1,454 +1,651 @@
-# Monitoring Infrastructure with AWS CloudWatch, Systems Manager, and Config
+# AWS Lab: Monitor an EC2 Instance (CloudWatch & SNS)
 
-## Project Overview
+**Date Completed:** _add date_
 
-This project demonstrates how to monitor applications and infrastructure using AWS monitoring and observability services. The ability to monitor your applications and infrastructure is critical for delivering reliable, consistent IT services. Monitoring requirements range from collecting statistics for long-term analysis to quickly reacting to changes and outages. Monitoring can also support compliance reporting by continuously checking that infrastructure is meeting organisational standards.
+**Time Spent:** _add time_
 
-**Services Used:**
-- AWS Systems Manager (Run Command, Parameter Store)
-- Amazon CloudWatch (Logs, Metrics, Alarms, Events)
-- AWS Config
-- Amazon SNS
-
----
-
-## What I Did
-
-### Task 1: Installing the CloudWatch Agent
-
-The CloudWatch agent collects metrics from EC2 instances, including system-level metrics like CPU allocation, free disk space, memory utilisation, and application logs.
-
-**Step 1.1: Install the CloudWatch Agent using Systems Manager Run Command**
-
-- Navigated to **Systems Manager → Run Command**
-- Selected the document **AWS-ConfigureAWSPackage**
-- Configured parameters:
-  - Action: `Install`
-  - Name: `AmazonCloudWatchAgent`
-  - Version: `latest`
-- Targeted the **Web Server** instance manually
-- Ran the command and verified success
-
-![Run Command Selection](run-command-1.png)
-
-*Figure 1: Selecting the AWS-ConfigureAWSPackage document*
-
-![Command Parameters](command-parameters-2.png)
-
-*Figure 2: Configuring installation parameters*
-
-![Target Selection](target-section-3.png)
-
-*Figure 3: Selecting the Web Server instance as target*
-
-**Step 1.2: Create a Parameter Store Configuration**
-
-- Navigated to **Systems Manager → Parameter Store**
-- Created a parameter named `Monitor-Web-Server`
-- Stored the CloudWatch agent configuration JSON
-
-![Create Parameter](parameters-6.png)
-
-*Figure 4: Creating the Monitor-Web-Server parameter*
-
-**Configuration File:**
-
-```json
-{
-  "logs": {
-    "logs_collected": {
-      "files": {
-        "collect_list": [
-          {
-            "log_group_name": "HttpAccessLog",
-            "file_path": "/var/log/httpd/access_log",
-            "log_stream_name": "{instance_id}",
-            "timestamp_format": "%b %d %H:%M:%S"
-          },
-          {
-            "log_group_name": "HttpErrorLog",
-            "file_path": "/var/log/httpd/error_log",
-            "log_stream_name": "{instance_id}",
-            "timestamp_format": "%b %d %H:%M:%S"
-          }
-        ]
-      }
-    }
-  },
-  "metrics": {
-    "metrics_collected": {
-      "cpu": {
-        "measurement": ["cpu_usage_idle", "cpu_usage_iowait", "cpu_usage_user", "cpu_usage_system"],
-        "metrics_collection_interval": 10,
-        "totalcpu": false
-      },
-      "disk": {
-        "measurement": ["used_percent", "inodes_free"],
-        "metrics_collection_interval": 10,
-        "resources": ["*"]
-      },
-      "diskio": {
-        "measurement": ["io_time"],
-        "metrics_collection_interval": 10,
-        "resources": ["*"]
-      },
-      "mem": {
-        "measurement": ["mem_used_percent"],
-        "metrics_collection_interval": 10
-      },
-      "swap": {
-        "measurement": ["swap_used_percent"],
-        "metrics_collection_interval": 10
-      }
-    }
-  }
-}
-```
-
-**What This Configuration Monitors:**
-
-| Type | Items |
-|------|-------|
-| **Logs** | Apache access logs (`/var/log/httpd/access_log`), Apache error logs (`/var/log/httpd/error_log`) |
-| **CPU Metrics** | Idle, I/O wait, user, system usage |
-| **Disk Metrics** | Used percentage, free inodes |
-| **Disk I/O** | I/O time |
-| **Memory** | Used percentage |
-| **Swap** | Used percentage |
-
-**Step 1.3: Start the CloudWatch Agent**
-
-- Navigated back to **Systems Manager → Run Command**
-- Selected the document **AmazonCloudWatch-ManageAgent**
-- Configured parameters:
-  - Action: `configure`
-  - Mode: `ec2`
-  - Optional Configuration Source: `ssm`
-  - Optional Configuration Location: `Monitor-Web-Server`
-  - Optional Restart: `yes`
-- Targeted the **Web Server** instance
-- Ran the command and verified success
-
-![SSM Document Selection](run-command-7.png)
-
-*Figure 5: Selecting the AmazonCloudWatch-ManageAgent document*
-
-![Command Parameters](agent-command-9.png)
-
-*Figure 6: Configuring CloudWatch agent parameters*
-
-![Step 1 Output](step-1-output-4.png)
-
-*Figure 7: Step 1 execution output*
-
-![Step 2 Output](step-2-output-5.png)
-
-*Figure 8: Step 2 execution output showing successful installation*
-
----
-
-### Task 2: Monitoring Application Logs Using CloudWatch Logs
-
-CloudWatch Logs enables monitoring of applications and systems using log data without code changes.
-
-**Step 2.1: Generate Log Data**
-
-- Accessed the web server using the provided IP address
-- Generated 404 errors by attempting to access non-existent pages:
-  - `http://<WebServerIP>/start`
-  - `http://<WebServerIP>/start2`
-  - Repeated 5+ times
-
-**Step 2.2: View Log Groups in CloudWatch**
-
-- Navigated to **CloudWatch → Log groups**
-- Verified two log groups were created: `HttpAccessLog` and `HttpErrorLog`
-
-![Log Groups](log-groups-10.png)
-
-*Figure 9: CloudWatch Log groups showing HttpAccessLog and HttpErrorLog*
-
-![Log Group Details](HttpAccessLog-11.png)
-
-*Figure 10: HttpAccessLog log group details*
-
-**Step 2.3: Create a Metric Filter for 404 Errors**
-
-- Created a metric filter on `HttpAccessLog` with filter pattern:
-  ```
-  [ip, id, user, timestamp, request, status_code=404, size]
-  ```
-- Tested the pattern against the log data
-- Created metric filter named `404Errors`:
-  - Namespace: `LogMetrics`
-  - Metric Name: `404Errors`
-  - Metric Value: `1`
-
-![Metric Filter Configuration](metric-filter-14.png)
-
-*Figure 11: Configuring the metric filter for 404 errors*
-
-**Step 2.4: Create a CloudWatch Alarm**
-
-- Created an alarm based on the `404Errors` metric:
-  - Condition: `Greater/Equal` than `5`
-  - Period: `1 minute`
-- Configured SNS notification to email
-- Alarm name: `404 Errors`
-- Alarm description: `Alert when too many 404s detected on an instance`
-
-![Alarm Conditions](alarm-conditions-14.png)
-
-*Figure 12: Configuring alarm conditions for 404 errors*
-
----
-
-### Task 3: Monitoring Instance Metrics Using CloudWatch
-
-CloudWatch stores metrics for AWS services and custom metrics from the CloudWatch agent.
-
-**Step 3.1: View EC2 Metrics**
-
-- Navigated to **EC2 → Instances → Web Server → Monitoring tab**
-- Viewed standard EC2 metrics (CPU, disk, network)
-
-**Step 3.2: View CloudWatch Agent Metrics**
-
-- Navigated to **CloudWatch → Metrics → All metrics**
-- Explored metrics in the `CWAgent` namespace
-- Viewed disk space metrics: `CWAgent > device, fstype, host, path`
-- Viewed memory metrics: `CWAgent > host`
-
----
-
-### Task 4: Creating Real-Time Notifications
-
-CloudWatch Events delivers a near-real-time stream of system events describing changes in AWS resources.
-
-**Step 4.1: Create a CloudWatch Event Rule**
-
-- Navigated to **CloudWatch → Events → Rules**
-- Created rule named `Instance_Stopped_Terminated`
-- Event source: `AWS Services → EC2 → EC2 Instance State-change Notification`
-- Specific state(s): `stopped` and `terminated`
-- Target: `SNS topic → Default_CloudWatch_Alarms_Topic`
-
-**Step 4.2: Test the Notification**
-
-- Stopped the Web Server instance from EC2 console
-- Received email notification with JSON details about the stopped instance
-- Confirmed real-time notification worked
-
----
-
-### Task 5: Monitoring Infrastructure Compliance with AWS Config
-
-AWS Config assesses, audits, and evaluates the configurations of AWS resources.
-
-**Step 5.1: Enable AWS Config**
-
-- Navigated to **AWS Config**
-- Initialised AWS Config with default settings
-
-**Step 5.2: Add Compliance Rules**
-
-**Rule 1: required-tags**
-- Added managed rule `required-tags`
-- Configured parameter: `tag1Key = project`
-- Rule checks for resources that do not have a `project` tag
-
-**Rule 2: ec2-volume-inuse-check**
-- Added managed rule `ec2-volume-inuse-check`
-- Rule checks for EBS volumes that are not attached to EC2 instances
-
-**Step 5.3: View Compliance Results**
-
-- Evaluated compliance results:
-  - `required-tags`: Web Server instance was compliant (had `project` tag)
-  - `ec2-volume-inuse-check`: Attached volume was compliant, unattached volume was non-compliant
-
----
-
-## Architecture Diagram
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           AWS Cloud                                         │
-│                                                                             │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │                     AWS Systems Manager                                │  │
-│  │  ┌───────────────────┐    ┌─────────────────────────────────────────┐ │  │
-│  │  │   Run Command      │    │         Parameter Store                 │ │  │
-│  │  │  ┌───────────────┐ │    │  ┌───────────────────────────────────┐ │ │  │
-│  │  │  │ AWS-Configure │ │    │  │   Monitor-Web-Server (config)     │ │ │  │
-│  │  │  │ AWSPackage    │ │    │  └───────────────────────────────────┘ │ │  │
-│  │  │  └───────────────┘ │    └─────────────────────────────────────────┘ │  │
-│  │  │  ┌───────────────┐ │                                               │  │
-│  │  │  │ AmazonCloud   │ │                                               │  │
-│  │  │  │ Watch-Manage  │ │                                               │  │
-│  │  │  │ Agent         │ │                                               │  │
-│  │  │  └───────────────┘ │                                               │  │
-│  │  └───────────────────┘                                               │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-│                                    │                                         │
-│                                    ▼                                         │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │                       EC2 Instance                                    │  │
-│  │  ┌─────────────────────────────────────────────────────────────────┐  │  │
-│  │  │                    Web Server                                   │  │  │
-│  │  │  ┌─────────────────────┐    ┌─────────────────────────────┐    │  │  │
-│  │  │  │  CloudWatch Agent   │    │   Apache Web Server          │    │  │  │
-│  │  │  │  (Collects metrics  │    │   /var/log/httpd/            │    │  │  │
-│  │  │  │   & logs)           │    │   access_log, error_log     │    │  │  │
-│  │  │  └─────────────────────┘    └─────────────────────────────┘    │  │  │
-│  │  └─────────────────────────────────────────────────────────────────┘  │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-│                                    │                                         │
-│                                    ▼                                         │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │                       Amazon CloudWatch                               │  │
-│  │  ┌───────────────┐    ┌───────────────┐    ┌───────────────────────┐ │  │
-│  │  │   Log Groups   │    │   Metrics     │    │   Alarms              │ │  │
-│  │  │  HttpAccessLog │    │  CWAgent      │    │  404 Errors           │ │  │
-│  │  │  HttpErrorLog  │    │  (CPU, Disk,  │    │  (Greater/Equal 5)    │ │  │
-│  │  │                │    │   Memory,     │    │                       │ │  │
-│  │  │  ┌───────────┐ │    │   Swap)       │    │                       │ │  │
-│  │  │  │Metric     │ │    │               │    │                       │ │  │
-│  │  │  │Filter     │ │    │               │    │                       │ │  │
-│  │  │  │404Errors  │ │    │               │    │                       │ │  │
-│  │  │  └───────────┘ │    └───────────────┘    └───────────┬───────────┘ │  │
-│  │  └───────────────┘                                     │             │  │
-│  └──────────────────────────────────────────────────────┬──┴─────────────┘  │
-│                                                         │                    │
-│                                              ┌──────────┴──────────┐       │
-│                                              │    Amazon SNS       │       │
-│                                              │  (Email Notification)│       │
-│                                              └─────────────────────┘       │
-│                                                                             │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │                     AWS Config                                        │  │
-│  │  ┌───────────────────────┐    ┌────────────────────────────────────┐ │  │
-│  │  │   required-tags       │    │   ec2-volume-inuse-check           │ │  │
-│  │  │   (project tag check) │    │   (attached volume check)          │ │  │
-│  │  └───────────────────────┘    └────────────────────────────────────┘ │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-│                                                                             │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │                  CloudWatch Events                                    │  │
-│  │  ┌─────────────────────────────────────────────────────────────────┐  │  │
-│  │  │  Rule: Instance_Stopped_Terminated                             │  │  │
-│  │  │  Event: EC2 Instance State-change Notification                 │  │  │
-│  │  │  Target: SNS Topic (email notification)                        │  │  │
-│  │  └─────────────────────────────────────────────────────────────────┘  │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## Summary of Services Used
-
-| Service | Purpose |
-|---------|---------|
-| **AWS Systems Manager Run Command** | Remotely install and configure the CloudWatch agent on EC2 instances |
-| **AWS Systems Manager Parameter Store** | Store the CloudWatch agent configuration securely |
-| **Amazon CloudWatch Logs** | Collect, monitor, and analyse log files from EC2 instances |
-| **Amazon CloudWatch Metrics** | Collect and visualise system and application metrics |
-| **Amazon CloudWatch Alarms** | Trigger notifications based on metric thresholds |
-| **Amazon CloudWatch Events** | Respond to real-time infrastructure changes |
-| **Amazon SNS** | Send email notifications for alarms and events |
-| **AWS Config** | Assess and audit resource configurations for compliance |
+**Service:** Amazon CloudWatch & Amazon SNS (Monitoring & Notification Services)
 
 ---
 
 ## What I Learned
 
-| Concept | What I Learned |
-|---------|----------------|
-| **Systems Manager Run Command** | Remotely execute commands on EC2 instances without SSH access |
-| **Parameter Store** | Securely store configuration data for applications and agents |
-| **CloudWatch Agent** | Collect custom metrics and logs from EC2 instances |
-| **CloudWatch Logs** | Centralise log data from multiple sources for analysis |
-| **Metric Filters** | Extract specific patterns from log data and turn them into metrics |
-| **CloudWatch Alarms** | Create alerts based on metric thresholds |
-| **CloudWatch Events** | Automate responses to infrastructure changes |
-| **AWS Config** | Continuously monitor and evaluate resource configurations |
-| **SNS Notifications** | Deliver alerts via email, SMS, or other endpoints |
+### 1. What Amazon CloudWatch Is
+
+Amazon CloudWatch is a monitoring and observability service built for DevOps engineers, developers, site reliability engineers (SREs), and IT managers. It provides data and actionable insights to monitor applications, respond to system-wide performance changes, optimize resource utilization, and get a unified view of operational health.
+
+**Key Capabilities:**
+- Collects metrics and logs from AWS resources
+- Monitors EC2 instances, EBS volumes, and RDS databases
+- Provides automated dashboards for visual data tracking
+- Triggers alarms based on custom thresholds
+- Integrates with SNS to send automated notifications
+
+**What CloudWatch Monitors:**
+
+| Resource | What It Monitors |
+|----------|------------------|
+| EC2 Instances | CPU utilization, network traffic, disk I/O |
+| EBS Volumes | Read/write operations, latency, throughput |
+| RDS Databases | Database connections, CPU, memory |
+| Lambda Functions | Invocation count, errors, duration |
+| S3 Buckets | Storage size, request counts, errors |
+
+**Common Uses of CloudWatch:**
+- Monitoring application performance in real-time
+- Setting alarms for resource exhaustion
+- Automating responses to system events
+- Visualizing metrics using dashboards
 
 ---
 
-## Key Takeaways
+### 2. Navigating the AWS Management Console for CloudWatch
 
-| Takeaway | Why It Matters |
-|----------|----------------|
-| **Centralised logging** | CloudWatch Logs eliminates the need to log in to individual servers |
-| **Automated configuration** | Systems Manager enables consistent configuration across multiple instances |
-| **Real-time monitoring** | CloudWatch provides near-real-time visibility into infrastructure |
-| **Proactive alerts** | Alarms notify you before issues impact users |
-| **Compliance automation** | AWS Config continuously checks resources against standards |
-| **Event-driven automation** | CloudWatch Events can trigger automated remediation |
+I learned how to navigate the AWS Console and access CloudWatch services.
+
+**Areas Explored:**
+
+- CloudWatch Dashboard
+- Alarms (All alarms)
+- Metrics (Browse, Graph)
+- Logs
+- Infrastructure Monitoring
+
+**Skills Gained:**
+- Navigating AWS regions for CloudWatch (us-west-2)
+- Understanding alarm states (OK, In alarm, Insufficient data)
+- Managing monitoring alerts from the console
+- Creating and configuring dashboards
 
 ---
 
-## Commands and Configuration Used
+### 3. Creating an SNS Topic
 
-### Parameter Store Configuration
+I learned how to create an Amazon Simple Notification Service (SNS) topic to handle notification routing.
 
-```json
-{
-  "logs": {
-    "logs_collected": {
-      "files": {
-        "collect_list": [
-          {
-            "log_group_name": "HttpAccessLog",
-            "file_path": "/var/log/httpd/access_log",
-            "log_stream_name": "{instance_id}",
-            "timestamp_format": "%b %d %H:%M:%S"
-          },
-          {
-            "log_group_name": "HttpErrorLog",
-            "file_path": "/var/log/httpd/error_log",
-            "log_stream_name": "{instance_id}",
-            "timestamp_format": "%b %d %H:%M:%S"
-          }
-        ]
-      }
-    }
-  },
-  "metrics": {
-    "metrics_collected": {
-      "cpu": {
-        "measurement": ["cpu_usage_idle", "cpu_usage_iowait", "cpu_usage_user", "cpu_usage_system"],
-        "metrics_collection_interval": 10,
-        "totalcpu": false
-      },
-      "disk": {
-        "measurement": ["used_percent", "inodes_free"],
-        "metrics_collection_interval": 10,
-        "resources": ["*"]
-      },
-      "diskio": {
-        "measurement": ["io_time"],
-        "metrics_collection_interval": 10,
-        "resources": ["*"]
-      },
-      "mem": {
-        "measurement": ["mem_used_percent"],
-        "metrics_collection_interval": 10
-      },
-      "swap": {
-        "measurement": ["swap_used_percent"],
-        "metrics_collection_interval": 10
-      }
-    }
-  }
-}
+**Create Topic Screen:**
+
+![Create Topic](creating-topic-5.png)
+
+*Figure 1: Creating an SNS topic named MyCwAlarm*
+
+**Topic Details Configured:**
+
+| Field | Value |
+|-------|-------|
+| Type | Standard |
+| Name | `MyCwAlarm` |
+| Protocol | Email |
+| Endpoint | `example@gmail.com` (Email address) |
+
+**What is an SNS Topic?**
+An SNS topic is a logical access point that acts as a communication channel. It allows you to group multiple endpoints (like email, SMS, or Lambda functions) and send messages to all of them at once.
+
+**Creating an SNS Topic Steps:**
+1. Navigate to Amazon SNS in AWS Console
+2. Click "Topics" in the left sidebar
+3. Click "Create topic"
+4. Select "Standard" as the type
+5. Enter a name (e.g., `MyCwAlarm`)
+6. Click "Create topic"
+
+---
+
+### 4. Creating an SNS Subscription
+
+I learned how to create a subscription to link an endpoint (email) to an SNS topic.
+
+**Subscription Configuration:**
+
+| Field | Value |
+|-------|-------|
+| Topic ARN | `arn:aws:sns:us-west-2:549675909988:MyCwAlarm` |
+| Protocol | Email |
+| Endpoint | `example@gmail.com` |
+
+**What This Does:**
+- The SNS topic sends notifications to this specific email address
+- Requires confirmation via email to activate
+- Once confirmed, SNS can send alerts to the endpoint
+
+**Subscription Confirmation:**
+
+![Subscription Confirmed](subscription-confirmed-7.png)
+
+*Figure 2: AWS notification confirming email subscription*
+
+**Confirmed Subscription Details:**
+```
+Subscription ARN: arn:aws:sns:us-west-2:549675909988:MyCwAlarm:f05d2037-0b92-43cf-aa50-195221dab5bc
 ```
 
-### Metric Filter Pattern
+**Key Takeaway:**
+- SNS subscriptions require manual confirmation through email
+- This prevents unauthorized endpoints from receiving notifications
+- The subscription becomes active immediately after confirmation
+
+---
+
+### 5. Generating CPU Load on EC2 (Stress Test)
+
+I learned how to intentionally generate high CPU load on an EC2 instance to test monitoring capabilities.
+
+**Stress Test Command Executed:**
+
+```bash
+sudo stress --cpu 10 -v --timeout 400s
+```
+
+**What This Command Does:**
+- Creates 10 CPU workers
+- Uses verbose mode (`-v`) to display output
+- Runs for 400 seconds (`--timeout`)
+- Forks multiple child processes to consume CPU resources
+
+**Stress Test Output:**
+```
+stress: info: [3362] dispatching hogs: 10 cpu, 0 io, 0 vm, 0 hdd
+stress: debug: [3362] using backoff sleep of 30000us
+stress: debug: [3362] setting timeout to 400s
+stress: debug: [3362] --> hogcpu worker 10 [3363] forked
+stress: debug: [3362] --> hogcpu worker 9 [3364] forked
+stress: debug: [3362] --> hogcpu worker 8 [3365] forked
+...
+```
+
+**Verifying CPU Usage with `top`:**
+
+| Field | Value |
+|-------|-------|
+| %CPU(s) | 100.0 us |
+| Load Average | 7.84, 2.63, 0.94 |
+| Running Tasks | 11 |
+| CPU Status | 100% utilization |
+
+**Why Stress Testing is Important:**
+- Tests whether CloudWatch alarms trigger correctly
+- Verifies SNS notification delivery works
+- Simulates real-world high-load scenarios
+- Ensures monitoring systems are properly configured
+
+---
+
+### 6. Creating a CloudWatch Alarm
+
+I learned how to create a CloudWatch alarm to monitor EC2 CPU utilization.
+
+**Alarm Configuration:**
+
+| Field | Value |
+|-------|-------|
+| Metric | CPUUtilization |
+| Namespace | AWS/EC2 |
+| InstanceId | `i-07140312f2a00bb28` |
+| Statistic | Average |
+| Period | 1 minute |
+| Threshold Type | Static |
+| Condition | Greater than 60% |
+| Alarm State Trigger | In alarm |
+
+**Metric Selection Screen:**
+
+![Select Metric](select-metric-4.png)
+
+*Figure 3: Selecting the CPUUtilization metric for the EC2 instance*
+
+**Conditions Configuration:**
+
+```yaml
+Threshold type: Static
+Whenever CPUUtilization is...: Greater
+than...: 60
+```
+
+**Alarm Settings:**
+- **Metric Name:** `CPUUtilization`
+- **Instance Name:** `Stress Test`
+- **Statistics:** `Average`
+- **Period:** `1 minute`
+
+**What This Alarm Does:**
+- Checks CPU utilization every minute
+- Triggers if utilization exceeds 60%
+- Sends notification to SNS topic `MyCwAlarm`
+- Enters "In alarm" state when threshold is breached
+
+---
+
+### 7. Configuring Alarm Actions (SNS Notifications)
+
+I learned how to link a CloudWatch alarm to an SNS topic for notifications.
+
+**Action Configuration:**
+
+| Field | Value |
+|-------|-------|
+| Alarm State Trigger | In alarm |
+| SNS Topic | Select an existing SNS topic |
+| Topic Name | `MyCwAlarm` |
+
+**Notification Flow:**
 
 ```
-[ip, id, user, timestamp, request, status_code=404, size]
+EC2 CPU > 60%  CloudWatch Alarm  SNS Topic  Email Notification
 ```
 
+**SNS Topic Selection Screen:**
+
+![Select SNS Topic](select-sns-topic-10.png)
+
+*Figure 4: Selecting the MyCwAlarm SNS topic for notifications*
+
+**Key Learnings:**
+- Alarms can trigger multiple actions (SNS, Auto Scaling, EC2 actions)
+- SNS handles message distribution to all subscribed endpoints
+- Notifications are sent automatically when alarm state changes
+- Email confirmation required before notifications are delivered
+
+---
+
+### 8. Understanding Alarm States
+
+I learned about the different states a CloudWatch alarm can be in.
+
+**Alarm States:**
+
+| State | Description |
+|-------|-------------|
+| OK | Metric is within the defined threshold |
+| In alarm | Metric is outside the defined threshold |
+| Insufficient data | Not enough data points to determine state |
+
+**Alarm State Transitions:**
+```
+OK  In alarm (metric breaches threshold)
+In alarm  OK (metric returns within threshold)
+Insufficient data  OK (enough data collected)
+```
+
+**Lab Alarm Details:**
+- **Alarm Name:** `LabCPUUtilizationAlarm`
+- **Current State:** In alarm (during stress test)
+- **Threshold:** CPU > 60% for 1 datapoint within 1 minute
+- **Metric Status:** CPUUtilization
+
+---
+
+### 9. Monitoring the Alarm and Metrics
+
+I learned how to view CloudWatch metrics and alarm graphs to monitor resource performance.
+
+**Alarm Graph Screen:**
+
+![Alarm Graph](alarm-graph-2.png)
+
+*Figure 5: LabCPUUtilizationAlarm graph showing CPU utilization spike*
+
+**Graph Details:**
+
+| Field | Value |
+|-------|-------|
+| Metric | CPUUtilization |
+| Threshold | 60% (Red line) |
+| Metric Data | Blue line |
+| Time Range | 3 hours |
+| Current CPU | 0.167% (after stress test ended) |
+
+**Observed Metrics:**
+- CPU utilization spiked to 100% during stress test
+- Metric dropped back to 0.167% after test completed
+- Alarm correctly triggered at the 60% threshold
+- Graph shows continuous monitoring data
+
+**Metric Browser Screen:**
+
+![Metrics Browser](metrics-browser-9.png)
+
+*Figure 6: CloudWatch metrics browser showing CPUUtilization for Stress Test instance*
+
+**Instance Metrics Displayed:**
+- CPUUtilization
+- NetworkIn
+- NetworkOut
+- NetworkPacketsIn
+- NetworkPacketsOut
+
+---
+
+### 10. Creating a CloudWatch Dashboard
+
+I learned how to create a custom dashboard to visualize and monitor AWS resources.
+
+**Dashboard Configuration:**
+
+| Field | Value |
+|-------|-------|
+| Dashboard Name | `LabEC2Dashboard` |
+| Valid Characters | 0-9A-Za-z-_ |
+| Type | Custom Dashboard |
+
+**Dashboard Creation Screen:**
+
+![Create Dashboard](create-dashboard-3.png)
+
+*Figure 7: Creating a new CloudWatch dashboard named LabEC2Dashboard*
+
+**What Dashboards Do:**
+- Provide a single view for multiple metrics
+- Allow custom placement of widgets
+- Enable real-time monitoring of resources
+- Can be shared with team members
+
+**Dashboard Benefits:**
+- Visualize resource performance trends
+- Identify anomalies quickly
+- Customize views for different teams
+- Monitor multiple resources in one place
+
+---
+
+### 11. Understanding CloudWatch Metrics Collection
+
+I learned how CloudWatch collects and processes metrics from AWS resources.
+
+**Metric Collection Process:**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      AWS Account                            │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
+│  │   EC2       │  │    RDS      │  │   Lambda    │         │
+│  │  Instance   │  │  Database   │  │  Function   │         │
+│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘         │
+│         │                │                │                 │
+│         ▼                ▼                ▼                 │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │              Amazon CloudWatch                       │   │
+│  │  - Collects metrics and logs                         │   │
+│  │  - Processes data points                             │   │
+│  │  - Stores metrics for retrieval                      │   │
+│  └─────────────────────────────────────────────────────┘   │
+│         │                │                │                 │
+│         ▼                ▼                ▼                 │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │                   Dashboards                         │   │
+│  │  - Visualizes metric data                            │   │
+│  │  - Provides real-time monitoring                     │   │
+│  │  - Customizable views                                │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Metric Data Points:**
+- **Average:** Mean value over the period
+- **Minimum:** Lowest value over the period
+- **Maximum:** Highest value over the period
+- **Sum:** Total of all values over the period
+
+---
+
+### 12. Understanding EC2 Monitoring Metrics
+
+I examined the metrics available for monitoring EC2 instances.
+
+**EC2 Standard Metrics:**
+
+| Metric Name | Description |
+|-------------|-------------|
+| CPUUtilization | Percentage of CPU capacity used |
+| NetworkIn | Bytes received on all network interfaces |
+| NetworkOut | Bytes sent on all network interfaces |
+| NetworkPacketsIn | Number of packets received |
+| NetworkPacketsOut | Number of packets sent |
+| DiskReadOps | Completed read operations |
+| DiskWriteOps | Completed write operations |
+| StatusCheckFailed | System and instance status checks |
+
+**Metric Characteristics:**
+- **Metric Name:** CPUUtilization
+- **Namespace:** AWS/EC2
+- **Instance ID:** i-07140312f2a00bb28
+- **Instance Name:** Stress Test
+- **Statistic:** Average
+- **Period:** 1 minute
+
+**Observed Metric Values:**
+- **Before Stress Test:** 0.167% CPU utilization
+- **During Stress Test:** 100% CPU utilization (peak)
+- **After Stress Test:** 0.167% CPU utilization
+
+---
+
+### 13. Understanding Resource Identification in CloudWatch
+
+I learned how to identify specific resources when configuring monitoring.
+
+**Instance Identification:**
+- **Instance ID:** `i-07140312f2a00bb28`
+- **Instance Name:** `Stress Test`
+- **Region:** us-west-2 (Oregon)
+- **Account ID:** 549675909988
+
+**Why Resource Identification Matters:**
+- Ensures metrics are tied to the correct resource
+- Prevents monitoring the wrong instance
+- Enables accurate alarm configuration
+- Allows proper dashboard visualization
+
+**Metric Selection Process:**
+1. Navigate to CloudWatch Metrics
+2. Browse by service (EC2)
+3. Search for Instance ID
+4. Select CPUUtilization metric
+5. Configure statistic and period
+
+---
+
+### 14. Understanding the Stress Test Instance
+
+I examined the EC2 instance used for the stress test and monitoring.
+
+**Instance Configuration:**
+
+| Field | Value |
+|-------|-------|
+| Instance ID | i-07140312f2a00bb28 |
+| Instance Name | Stress Test |
+| Session ID | user5033126-Owen_Maake-cj4xtqi2ntkziblxykabs25z4 |
+| Status | Running |
+| CPU Load | 100% (during stress) |
+| Available Memory | 39756 MB |
+
+**Stress Test Results:**
+- **Load Average:** 7.84, 2.63, 0.94
+- **Running Tasks:** 11
+- **CPU Usage:** 100.0 us
+- **Number of Stress Processes:** 10
+
+**Instance Metrics Observed:**
+- CPU usage reached 100% during stress test
+- Load average increased significantly
+- System remained responsive despite high load
+- Monitoring correctly captured the spike
+
+---
+
+### 15. Understanding Alarm Notification Flow
+
+I learned how CloudWatch alarms trigger notifications through SNS.
+
+**Notification Flow Architecture:**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Notification Flow                             │
+│                                                                 │
+│  ┌────────────┐     ┌──────────────┐     ┌──────────────┐      │
+│  │  EC2 CPU   │     │  CloudWatch  │     │  SNS Topic   │      │
+│  │ Utilization│────▶│   Alarm      │────▶│  (MyCwAlarm) │      │
+│  │  > 60%     │     │ (In alarm)   │     │              │      │
+│  └────────────┘     └──────────────┘     └──────┬───────┘      │
+│                                                 │               │
+│                                                 ▼               │
+│                                        ┌──────────────────┐    │
+│                                        │ Email Subscription│   │
+│                                        │ (example@gmail.com)│  │
+│                                        └──────────────────┘    │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Key Components:**
+- **Metric:** CPU utilization data point
+- **Alarm:** Monitors metric against threshold
+- **SNS Topic:** Routes notifications to endpoints
+- **Email Subscription:** Delivers notification to user
+
+---
+
+## Skills Summary
+
+**Skills I Gained from This Lab:**
+
+| Category | Skills |
+|----------|--------|
+| CloudWatch | Creating alarms, configuring thresholds |
+| SNS | Creating topics, managing subscriptions |
+| EC2 Monitoring | Monitoring CPU utilization, stress testing |
+| Dashboards | Creating custom monitoring views |
+| Notifications | Configuring email alerts, understanding alarm states |
+| Metric Analysis | Reading metric graphs, understanding data points |
+
+---
+
+## Why CloudWatch Matters for Cloud Practitioner Exam
+
+**Exam Topics Covered:**
+
+| Exam Domain | What I Learned |
+|-------------|----------------|
+| Monitoring Services | CloudWatch for resource monitoring |
+| Notification Services | SNS for alert notifications |
+| EC2 Operations | Monitoring and stress testing instances |
+| Cloud Operations | Alarm creation and dashboard management |
+| Incident Response | Detecting and responding to performance issues |
+
+**CloudWatch Facts to Memorise for Exam:**
+
+| Fact | Value |
+|------|-------|
+| CloudWatch purpose | Monitoring and observability |
+| Alarm states | OK, In alarm, Insufficient data |
+| SNS purpose | Notification service |
+| Alarm threshold | Custom percentage/values |
+| Default monitoring | Basic (5-minute intervals) |
+| Detailed monitoring | 1-minute intervals |
+
+---
+
+## Common Errors and Solutions
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| No metrics appearing | Instance not running | Ensure EC2 instance is running |
+| Alarm not triggering | Wrong metric selected | Verify metric name and instance ID |
+| Email not received | Subscription not confirmed | Confirm subscription via email link |
+| Alarm stuck in insufficient data | No data points | Wait for metric collection period |
+| Dashboard not showing data | Wrong region | Check correct region (us-west-2) |
+
+---
+
+## Cost Analysis
+
+**CloudWatch Pricing (us-west-2):**
+
+| Service | Price |
+|---------|-------|
+| Custom metrics | $0.30 per metric per month |
+| Alarm metrics | $0.10 per alarm per month |
+| Dashboard (3 widgets) | $3.00 per month |
+| SNS notifications (first 100k) | $0.50 per 100k messages |
+| SNS email subscriptions | Free |
+
+**Free Tier:**
+- 10 custom metrics (first month)
+- 3 alarms (first month)
+- 10 dashboards (first month)
+- SNS notifications (first 1M messages)
+
+**My Lab Cost:**
+- 1 CloudWatch alarm
+- 1 SNS topic
+- 1 email subscription
+- 1 dashboard
+- **Total cost: $0.00 (within free tier)**
+
+---
+
+## Next Learning Goals
+
+| Topic | Why It's Important |
+|-------|---------------------|
+| CloudWatch Logs | Centralise application logs |
+| CloudWatch Events | Automate responses to state changes |
+| AWS CloudTrail | Audit API activity |
+| SNS Mobile Push | Notifications for mobile devices |
+| Auto Scaling | Automatically adjust resources based on alarms |
+
+---
+
+## Resources Used
+
+- AWS Free Tier account (us-west-2 / Oregon)
+- Amazon CloudWatch console
+- Amazon SNS console
+- EC2 instance (`Stress Test`)
+- AWS Systems Manager Session Manager
+- `stress` command-line utility
+
+---
+
+## Final Reflection
+
+This lab transformed my understanding of AWS monitoring and alerting. I learned that:
+
+**Monitoring is essential** – CloudWatch provides real-time visibility into AWS resource performance. Without it, issues can go unnoticed until they become critical.
+
+**Alarms automate response** – By setting alarms, I can be notified automatically when resources exceed thresholds. This reduces manual monitoring effort and enables faster incident response.
+
+**SNS handles notifications** – SNS provides a reliable way to route alerts to various endpoints. The subscription confirmation process ensures notifications only reach intended recipients.
+
+**Stress testing validates configurations** – By deliberately generating high CPU load, I verified that alarms trigger correctly and notifications are delivered as expected.
+
+**Dashboards provide visibility** – Custom dashboards allow monitoring multiple resources in a single view, making it easier to spot trends and anomalies.
+
+---
+
+## Lab Status:  COMPLETED
+
+**Date:** August 21, 2026
+
+**Environment:** AWS us-west-2 (Oregon)
+
+**Account ID:** 5496-7590-9988
+
+**EC2 Instance Monitored:** i-07140312f2a00bb28 (Stress Test)
+
+**SNS Topic Created:** MyCwAlarm
+
+**Alarm Created:** LabCPUUtilizationAlarm (CPU > 60%)
+
+**Dashboard Created:** LabEC2Dashboard
+
+**Stress Test Duration:** 400 seconds
+
+**Peak CPU Usage:** 100%
+
+**Alarm State:** In alarm (triggered correctly)
+
+**Notifications:** Delivered via email subscription
+
+---
