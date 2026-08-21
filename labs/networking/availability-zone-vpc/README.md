@@ -1,4 +1,4 @@
-# 🌐 AWS VPC: Networking in the Cloud
+# AWS VPC: Networking in the Cloud
 
 **Date Completed:** April 29, 2026
 
@@ -208,9 +208,9 @@ NAT (Network Address Translation) Gateway allows instances in a private subnet t
 
 | Route Target | Subnet Type | Internet Access |
 |--------------|-------------|-----------------|
-| `igw-xxxxx` | Public | ✅ Two-way (inbound + outbound) |
-| `nat-xxxxx` | Private | ✅ Outbound only |
-| (no route) | Private | ❌ No internet access |
+| `igw-xxxxx` | Public |  Two-way (inbound + outbound) |
+| `nat-xxxxx` | Private |  Outbound only |
+| (no route) | Private |  No internet access |
 
 **Why Private Subnets Can't Have IGW:**
 - Security - databases and internal servers shouldn't be publicly accessible
@@ -312,7 +312,7 @@ I learned how to configure security groups so the web server can talk to the dat
 **The Pattern:**
 
 ```
-Internet → Web Server (Public) → DB Server (Private)
+Internet  Web Server (Public)  DB Server (Private)
                 │                        │
                 │ (Port 3306)            │
                 └────────────────────────┘
@@ -322,9 +322,9 @@ Internet → Web Server (Public) → DB Server (Private)
 
 | Direction | Source | Destination | Port | Why |
 |-----------|--------|-------------|------|-----|
-| Web → DB | Web Server SG | DB Server SG | 3306 | Web server queries database |
-| Internet → Web | 0.0.0.0/0 | Web Server SG | 80 | Users access website |
-| Admin → Web | Your IP | Web Server SG | 22 | Secure SSH access |
+| Web  DB | Web Server SG | DB Server SG | 3306 | Web server queries database |
+| Internet  Web | 0.0.0.0/0 | Web Server SG | 80 | Users access website |
+| Admin  Web | Your IP | Web Server SG | 22 | Secure SSH access |
 
 **Security Group Reference (Best Practice):**
 
@@ -355,13 +355,13 @@ The server at 32.195.7.34 is taking too long to respond.
 |---------|------------|
 | Security group blocks HTTP (port 80) | Add inbound rule for HTTP |
 | No public IP assigned | Enable auto-assign public IP or attach Elastic IP |
-| Route table missing IGW route | Add `0.0.0.0/0` → `igw-xxxxx` |
+| Route table missing IGW route | Add `0.0.0.0/0`  `igw-xxxxx` |
 | Instance not running | Start the instance |
 | Wrong DNS/IP address | Check public IP in EC2 console |
 | Instance has stopped/stale state | Terminate and relaunch |
 
 **My Fix:**
-I checked the route table and confirmed the IGW route was present (`0.0.0.0/0 → igw-0ccce6db770d0c...`). I also verified the security group had HTTP (port 80) inbound allowed from `0.0.0.0/0`.
+I checked the route table and confirmed the IGW route was present (`0.0.0.0/0  igw-0ccce6db770d0c...`). I also verified the security group had HTTP (port 80) inbound allowed from `0.0.0.0/0`.
 
 ---
 
@@ -404,8 +404,8 @@ ping <public-ip>
                     │  │         10.10.0.0/16                 │    │
                     │  │  ┌─────────────────────────────┐    │    │
                     │  │  │   Route Table: rtb-xxxx      │    │    │
-                    │  │  │   10.10.0.0/16 → local        │    │    │
-                    │  │  │   0.0.0.0/0 → IGW             │    │    │
+                    │  │  │   10.10.0.0/16  local        │    │    │
+                    │  │  │   0.0.0.0/0  IGW             │    │    │
                     │  │  └─────────────────────────────┘    │    │
                     │  │                                      │    │
 Internet ── IGW ────┼──▶  ┌─────────────────────┐           │    │
@@ -532,7 +532,7 @@ This lab transformed my understanding of AWS networking. I learned that:
 
 ---
 
-## Lab Status: ✅ COMPLETED
+## Lab Status:  COMPLETED
 
 **Date:** June 6, 2026
 
