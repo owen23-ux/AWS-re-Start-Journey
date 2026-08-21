@@ -6,13 +6,11 @@ In this lab, I explored AWS Key Management Service (KMS) and used the AWS Encryp
 
 **Date Completed:** August 2026
 
+**Time Spent:** _add time_
+
 **Author:** Owen Maake – AWS re/Start Participant | Aspiring SOC Analyst
 
 ---
-
-## Certificate
-
-![Certificate](Owen.pdf)
 
 *Figure 1: AWS SimuLearn completion certificate*
 
