@@ -1,570 +1,310 @@
-# 🔍 Amazon Inspector: Vulnerability Management in the Cloud
+# AWS KMS & Encryption CLI Lab - Data Protection
 
-**Date Completed:** June 8, 2026
+## Lab Overview
 
-**Time Spent:** 1 hour
+In this lab, I explored AWS Key Management Service (KMS) and used the AWS Encryption SDK CLI to encrypt and decrypt data files. I created a KMS key, configured the AWS CLI with temporary credentials, installed the encryption SDK, and performed encryption operations on a file server.
 
-**Service:** Amazon Inspector (Vulnerability Management Service)
+**Date Completed:** August 2026
+
+**Author:** Owen Maake – AWS re/Start Participant | Aspiring SOC Analyst
+
+---
+
+## Certificate
+
+![Certificate](Owen.pdf)
+
+*Figure 1: AWS SimuLearn completion certificate*
+
+**Awarded to:** Owen Lethabo
+
+---
+
+## Lab Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              AWS Cloud                                     │
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                      AWS KMS                                        │   │
+│  │  ┌─────────────────────────────────────────────────────────────┐   │   │
+│  │  │                    Customer Managed Key                      │   │   │
+│  │  │                  Alias: MyKMSKey                            │   │   │
+│  │  │         Description: Key to encrypt and decrypt data files  │   │   │
+│  │  └─────────────────────────────────────────────────────────────┘   │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                        │
+│                                    ▼                                        │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                        EC2 Instance                                 │   │
+│  │               i-007d293ff61cf739d (File Server)                     │   │
+│  │  ┌─────────────────────────────────────────────────────────────┐   │   │
+│  │  │                 AWS CLI + Encryption SDK                     │   │   │
+│  │  │  ┌─────────────────────────────────────────────────────────┐ │   │   │
+│  │  │  │  AWS CLI Configured with temporary credentials         │ │   │   │
+│  │  │  │  aws-encryption-sdk-cli installed via pip3             │ │   │   │
+│  │  │  │  Encrypt/Decrypt operations performed                  │ │   │   │
+│  │  │  └─────────────────────────────────────────────────────────┘ │   │   │
+│  │  └─────────────────────────────────────────────────────────────┘   │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Step 1: Create a KMS Key
+
+![KMS Console](kms-1.png)
+
+*Figure 2: AWS KMS console*
+
+### Create Customer Managed Key
+
+![Create Key](creating-key-2.png)
+
+*Figure 3: Creating a KMS key with alias and description*
+
+| Field | Value |
+|-------|-------|
+| **Alias** | `MyKMSKey` |
+| **Description** | `Key used to encrypt and decrypt data files` |
+
+**Key Details:**
+- **Type:** Customer Managed Key (CMK)
+- **Origin:** AWS_KMS
+- **Usage:** Encrypt/Decrypt
+
+---
+
+## Step 2: Connect to File Server
+
+![Instance Connection](instance-3.png)
+
+*Figure 4: Connecting to the File Server EC2 instance*
+
+| Field | Value |
+|-------|-------|
+| **Instance ID** | `i-007d293ff61cf739d (File Server)` |
+| **VPC ID** | `vpc-0df60e795f8e7e441` |
+| **Security Group** | `sg-087586af406987b2f` |
+| **IAM Role** | `c208432a5296593154684991tW8918751` |
+
+---
+
+## Step 3: Configure AWS CLI
+
+![AWS CLI Configuration](ccli-4.png)
+
+*Figure 5: Configuring AWS CLI with temporary credentials*
+
+### CLI Configuration Steps:
+
+```bash
+# Configure AWS CLI
+aws configure
+AWS Access Key ID: ASIA47J7GP5K5Q247K
+AWS Secret Access Key: 0khj9XWwA6NNZPePR7Rh5WpYCVOWTZe2MQQs2JC
+Default region name: us-west-2
+Default output format: json
+
+# Set session token (optional)
+aws configure set session_token IQQb3JpzL21uX2VjEAUcXVZLxd1c3QtMiJIMEYCIQFAPMuV5oqtSx6446j5GLv6CMi5jXmuRnHM3u/OPV98gIhAJt/Er+AnucbwMBU920M1Z0P9fJZpna6...
+```
+
+**Authentication Details:**
+
+| Credential | Purpose |
+|------------|---------|
+| **Access Key ID** | Identifies the IAM user or role |
+| **Secret Access Key** | Authenticates the API request |
+| **Session Token** | Temporary security token for session-based authentication |
+
+---
+
+## Step 4: Install AWS Encryption SDK
+
+![Installation](cli-5.png)
+
+*Figure 6: Installing aws-encryption-sdk-cli*
+
+```bash
+# Install the AWS Encryption SDK CLI
+pip3 install aws-encryption-sdk-cli
+
+# Installation output
+Collecting aws-encryption-sdk-cli
+  Downloading aws_encryption_sdk_cli-4.3.0-py2.py3-none-any.whl (44 kB)
+Requirement already satisfied: setuptools in /usr/lib/python3.7/site-packages
+
+Collecting attrs>=17.1.0
+  Downloading attrs-24.2.0-py3-none-any.whl (63 kB)
+
+Collecting base64io>=1.0.1
+  Downloading base64io-1.0.3-py2.py3-none-any.whl (17 kB)
+
+Collecting aws-encryption-sdk~=3.1
+  Downloading aws_encryption_sdk-3.1.1-py2.py3-none-any.whl (90 kB)
+
+Collecting importlib-metadata; python_version < "3.8"
+  Downloading importlib_metadata-6.7.0-py3-none-any.whl (22 kB)
+
+Collecting cryptography>=3.4.6
+  Downloading cryptography-45.0.7-cp37-abi3-manylinux2014_x86_64.whl (4.4 MB)
+
+Collecting boto3>=1.10.0
+  Downloading boto3-1.33.13-py3-none-any.whl (139 kB)
+
+Collecting wrapt>=1.10.11
+  Downloading wrapt-1.16.0-cp37-cp37m-manylinux_2_5_x86_64.whl (77 kB)
+```
+
+**Dependencies Installed:**
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| `aws-encryption-sdk-cli` | 4.3.0 | CLI for encryption operations |
+| `aws-encryption-sdk` | 3.1.1 | Python SDK for encryption |
+| `cryptography` | 45.0.7 | Cryptographic primitives |
+| `boto3` | 1.33.13 | AWS SDK for Python |
+| `attrs` | 24.2.0 | Data validation |
+| `wrapt` | 1.16.0 | Function wrapping |
+| `importlib-metadata` | 6.7.0 | Metadata support for Python 3.7 |
+
+---
+
+## Step 5: Encrypt and Decrypt Data
+
+### Using AWS Encryption SDK CLI
+
+```bash
+# Encrypt a file using the KMS key
+aws-encryption-cli --encrypt \
+  --input testfile.txt \
+  --output testfile.encrypted \
+  --wrapping-keys key-id=MyKMSKey
+
+# Decrypt the file
+aws-encryption-cli --decrypt \
+  --input testfile.encrypted \
+  --output testfile.decrypted \
+  --wrapping-keys key-id=MyKMSKey
+
+# Verify decrypted content matches original
+diff testfile.txt testfile.decrypted
+```
 
 ---
 
 ## What I Learned
 
-### 1. What Amazon Inspector Is
-
-Amazon Inspector is a vulnerability management service that continuously scans AWS workloads for software vulnerabilities and unintended network exposure.
-
-**Key Capabilities:**
-- Scans EC2 instances for operating system and package vulnerabilities
-- Scans container images in Amazon ECR for known CVEs
-- Scans Lambda functions for code dependencies with vulnerabilities
-- Provides finding reports with severity scores and remediation steps
-
-**What Inspector Scans:**
-
-| Resource | What It Checks |
-|----------|----------------|
-| EC2 Instances | OS vulnerabilities, missing patches, network exposure |
-| Container Images | Known CVEs in container layers |
-| Lambda Functions | Vulnerabilities in Python, Node.js, Java dependencies |
-| Code Repositories | Infrastructure as code misconfigurations |
-
-**Common Uses of Inspector:**
-- Continuous compliance monitoring
-- Identifying unpatched CVEs before exploitation
-- Detecting internet-exposed resources
-- Automating vulnerability reporting for audits
+| Concept | What I Learned |
+|---------|----------------|
+| **AWS KMS** | Creating and managing Customer Managed Keys (CMK) |
+| **Key Aliases** | Friendly names for KMS keys to simplify reference |
+| **AWS CLI Configuration** | Configuring access keys and temporary session tokens |
+| **AWS Encryption SDK** | Using the SDK CLI to encrypt and decrypt data |
+| **Dependency Management** | Installing Python packages via pip3 |
+| **Temporary Credentials** | Using session tokens for secure access |
+| **Security Best Practices** | Keys should have clear descriptions and proper aliases |
 
 ---
 
-### 2. Navigating the AWS Management Console for Inspector
-
-I learned how to navigate the AWS Console and access Inspector services.
-
-**Areas Explored:**
-
-- Inspector Dashboard
-- Activate Inspector
-- Findings
-- EC2 instances coverage
-- Container repositories coverage
-- Lambda functions coverage
-- Scan settings
-
-**Skills Gained:**
-- Navigating AWS regions for Inspector (us-west-2)
-- Understanding finding severity levels (Critical, High, Medium, Low)
-- Managing vulnerability assessments from the console
-
----
-
-### 3. Activating Amazon Inspector
-
-I learned how to activate Amazon Inspector for an AWS account.
-
-**Activation Screen:**
-
-![Activate Inspector](activating-inspector-2.png)
-
-*Figure 1: Activating Amazon Inspector*
-
-**Service Permissions Granted:**
-When you activate Inspector, you grant it permission to:
-- Discover and classify sensitive data
-- Generate findings about potential security issues
-- Scan EC2 instances, container images, and Lambda functions
-
-**Activation Steps:**
-1. Navigate to Amazon Inspector in AWS Console
-2. Click "Activate this account"
-3. Review the required IAM permissions
-4. Confirm activation
-
-**Free Trial:**
-- 15-day free trial for EC2 scanning, ECR container scanning, and Lambda scanning
-- After trial, pay per resource scanned per month
-
----
-
-### 4. Understanding Resource Coverage
-
-I learned how Inspector covers different AWS resource types.
-
-**Resource Coverage from Lab:**
-
-| Resource Type | Scanning Status | Count |
-|---------------|-----------------|-------|
-| EC2 instances | Scanning | 0 |
-| Container repositories | Scanning | 0 |
-| Container images | Scanning | 0 |
-| Lambda functions | Scanning | 2 |
-| Code repositories | Not scanning | 0 |
-
-**From Resource Coverage Screen:**
-
-```
-EC2 instances: Scanning: 0 | Not scanning: 0
-Container repositories: Scanning: 0 | Not scanning: 0
-Container images: Scanning: 0 | Not scanning: 0
-Lambda functions: Scanning: 2 | Not scanning: 0
-Code repositories: Scanning: 0 | Not scanning: 0
-```
-
-**What This Means:**
-- Inspector was actively scanning 2 Lambda functions in my account
-- Each Lambda function was checked for vulnerable dependencies
-- Findings are generated automatically when vulnerabilities are found
-
----
-
-### 5. Understanding Lambda Function Scanning
-
-I learned how Inspector scans Lambda functions for vulnerable dependencies.
-
-**Lambda Function Scanned:**
-
-| Field | Value |
-|-------|-------|
-| Function Name | `get-request` |
-| Function ARN | `arn:aws:lambda:us-west-2:483533674646:function:get-request` |
-| Runtime | Python (implied) |
-| Dependencies | requests==2.20.0 |
-| Last Modified | 10 minutes ago |
-
-**How Lambda Scanning Works:**
-
-```
-1. Developer uploads Lambda function code
-2. Inspector automatically detects the function
-3. Inspector scans the deployment package
-4. Inspector checks dependencies against CVE database
-5. Vulnerabilities are reported as findings
-```
-
-**What Inspector Checks in Lambda:**
-- Python packages (requirements.txt)
-- Node.js modules (package.json)
-- Java dependencies (pom.xml, build.gradle)
-- .NET packages
-
----
-
-### 6. Understanding Findings
-
-I learned how to view and interpret Inspector findings.
-
-**Findings Dashboard:**
-
-![Findings](findings-3.png)
-
-*Figure 2: Inspector findings dashboard showing medium severity CVE*
-
-**Finding Details from Lab:**
-
-| Field | Value |
-|-------|-------|
-| Severity | Medium |
-| CVE ID | CVE-2024-47081 - requests |
-| Impacted Resource | `get-request` (Lambda function) |
-| Type | Package Vulnerability |
-| Age | 1 minute |
-| Status | Active |
-
-**Other CVEs Found:**
-
-| CVE ID | Package | Severity |
-|--------|---------|----------|
-| CVE-2024-47081 | requests | Medium |
-| CVE-2023-32681 | requests | Medium |
-| CVE-2023-46746 | requests | - |
-| CVE-2024-35195 | requests | Medium |
-| CVE-2026-25645 | requests | - |
-
-**What This Means:**
-- The Lambda function `get-request` was using `requests==2.20.0`
-- This version of the `requests` library has known security vulnerabilities
-- Inspector automatically detected these CVEs
-- Each finding provides remediation guidance
-
----
-
-### 7. Understanding CVE (Common Vulnerabilities and Exposures)
-
-I learned what CVEs are and why they matter.
-
-**What is a CVE?**
-A CVE is a publicly known cybersecurity vulnerability with a unique identifier.
-
-**CVE Structure:**
-```
-CVE-2024-47081
-│    │      │
-│    │      └── Unique identifier
-│    └── Year discovered
-└── Common Vulnerabilities and Exposures
-```
-
-**CVE Severity Levels (CVSS Score):**
-
-| Severity | CVSS Score | Example Impact |
-|----------|------------|----------------|
-| Critical | 9.0 - 10.0 | Remote code execution, data breach |
-| High | 7.0 - 8.9 | Privilege escalation, data tampering |
-| Medium | 4.0 - 6.9 | Denial of service, information disclosure |
-| Low | 0.1 - 3.9 | Limited impact, difficult to exploit |
-
----
-
-### 8. Understanding the requests Package Vulnerability
-
-I learned about the specific vulnerability found in my Lambda function.
-
-**What is the requests Package?**
-The `requests` library is a popular Python package for making HTTP requests.
-
-**Vulnerability Details (CVE-2024-47081):**
-
-| Aspect | Information |
-|--------|-------------|
-| Package | requests |
-| Vulnerable Version | 2.20.0 |
-| Fixed Version | 2.32.0+ |
-| Impact | Redirect URL validation bypass |
-| Risk | Potential information disclosure |
-
-**How the Vulnerability Works:**
-
-```python
-# Vulnerable code (uses requests 2.20.0)
-import requests
-response = requests.get('http://example.com', allow_redirects=True)
-# Attacker could redirect to malicious site without validation
-```
-
-**Remediation:**
-```bash
-# Upgrade to patched version
-pip install requests>=2.32.0
-```
-
----
-
-### 9. Understanding Finding Status
-
-I learned how to track finding remediation.
-
-**Finding Status Flow:**
-
-```
-Active → In Progress → Closed
-   │
-   └── Suppressed (false positive or accepted risk)
-```
-
-**Closed Findings from Lab:**
-
-| CVE | Status | Age |
-|-----|--------|-----|
-| CVE-2024-47081 - requests | Closed | 7 minutes |
-| CVE-2023-32681 - requests | Closed | 7 minutes |
-| CVE-2026-25645 - requests | Closed | 7 minutes |
-| CVE-2024-35195 - requests | Closed | 7 minutes |
-| CVE-2023-46746 - requests | Closed | 7 minutes |
-
-**Why Findings Were Closed:**
-- The Lambda function code was updated
-- The `requests` package was upgraded to a secure version
-- Inspector re-scanned and confirmed the vulnerability was fixed
-
----
-
-### 10. Understanding Inspector Integration
-
-I learned how Inspector integrates with other AWS services.
-
-**Service Integration:**
-
-| Service | Integration |
-|---------|-------------|
-| Security Hub | Findings are sent to Security Hub for central visibility |
-| CloudWatch | Alarms can be triggered on critical findings |
-| EventBridge | Automate response to new vulnerabilities |
-| Systems Manager | Patch remediation for EC2 instances |
-
-**Finding Details from Lab:**
-
-| Field | Value |
-|-------|-------|
-| AWS Account ID | 483533674646 |
-| Inspector Score | (displayed at vulnerability site) |
-| Finding Overview | CVE details and impacted resources |
-
----
-
-### 11. Understanding Lambda Function Code with Vulnerability
-
-I examined the Lambda function that had the vulnerable dependency.
-
-**Lambda Function Details:**
-
-![Lambda Function](lambda-function-4.png)
-
-*Figure 3: Lambda function overview showing get-request function*
-
-**Function Configuration:**
-
-| Field | Value |
-|-------|-------|
-| Function Name | `get-request` |
-| Function ARN | `arn:aws:lambda:us-west-2:483533674646:function:get-request` |
-| Application | `c208432a52965891f5453970t1w483533674646` |
-| Last Modified | 10 minutes ago |
-
-**Dependency File (requirements.txt):**
-
-```
-requests==2.20.0
-```
-
-**What This Code Does:**
-- Makes HTTP requests using the `requests` library
-- Version 2.20.0 is vulnerable to redirect-related security issues
-- An attacker could potentially exploit this to access internal resources
-
----
-
-### 12. Understanding Remediation Steps
-
-I learned how to fix the vulnerabilities found by Inspector.
-
-**Step 1: Identify Vulnerable Package**
-
-Inspector finding shows:
-- Package: `requests`
-- Current version: `2.20.0`
-- Vulnerability: CVE-2024-47081
-
-**Step 2: Check Latest Secure Version**
-
-```bash
-# Check available versions
-pip index versions requests
-
-# Output shows latest version (e.g., 2.32.0)
-```
-
-**Step 3: Update requirements.txt**
-
-```txt
-# Before
-requests==2.20.0
-
-# After
-requests==2.32.0
-```
-
-**Step 4: Redeploy Lambda Function**
-
-```bash
-# Update function code with new requirements
-zip -r function.zip .
-aws lambda update-function-code \
-  --function-name get-request \
-  --zip-file fileb://function.zip
-```
-
-**Step 5: Verify Fix**
-
-Inspector automatically re-scans and updates the finding status to "Closed"
-
----
-
-### 13. Understanding Inspector Architecture
-
-I learned how Inspector scans resources in AWS.
-
-**Scanning Architecture:**
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                      AWS Account                            │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │   EC2       │  │   ECR       │  │   Lambda    │         │
-│  │  Instance   │  │ Repository  │  │  Function   │         │
-│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘         │
-│         │                │                │                 │
-│         ▼                ▼                ▼                 │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │              Amazon Inspector                        │   │
-│  │  - Scans OS and package vulnerabilities              │   │
-│  │  - Checks network exposure                           │   │
-│  │  - Compares against CVE database                     │   │
-│  └─────────────────────────────────────────────────────┘   │
-│         │                │                │                 │
-│         ▼                ▼                ▼                 │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │                   Findings                           │   │
-│  │  - Severity (Critical/High/Medium/Low)               │   │
-│  │  - Remediation guidance                              │   │
-│  │  - Affected resources                                │   │
-│  └─────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────┘
-```
-
----
-
-### 14. Understanding Lambda Function Code Source
-
-I examined the code source of the vulnerable Lambda function.
-
-**Code Source Explorer:**
-
-```
-EXPLORER
-├── GET-REQUEST
-│   ├── index.py
-│   └── requirements.txt (requests==2.20.0)
-```
-
-**What This Shows:**
-- The Lambda function is named `get-request`
-- It has Python code (`index.py`)
-- It uses external libraries defined in `requirements.txt`
-- The `requests` library is pinned to version 2.20.0
-
-**Why Pinning Versions Matters:**
-- Pinning ensures consistent behaviour across environments
-- But pinned versions can become outdated and vulnerable
-- Regular updates are needed for security
+## KMS Key Configuration
+
+| Setting | Value |
+|---------|-------|
+| **Key Type** | Customer Managed Key (CMK) |
+| **Alias** | `MyKMSKey` |
+| **Description** | `Key used to encrypt and decrypt data files` |
+| **Origin** | AWS_KMS |
+| **Key State** | Enabled |
 
 ---
 
 ## Skills Summary
 
-**Skills I Gained from This Lab:**
-
-| Category | Skills |
-|----------|--------|
-| Inspector | Activating Inspector, understanding resource coverage |
-| Vulnerability Management | Identifying CVEs, understanding severity levels |
-| Lambda Scanning | Scanning function dependencies, finding vulnerable packages |
-| Findings Analysis | Reading finding details, understanding impacted resources |
-| Remediation | Updating vulnerable packages, verifying fixes |
-| CVE Understanding | CVE structure, severity scoring, disclosure process |
+| Skill | How I Developed It |
+|-------|-------------------|
+| **Key Management** | Created and managed KMS keys |
+| **AWS CLI** | Configured credentials and session tokens |
+| **Encryption SDK** | Installed and used CLI tools for encryption |
+| **File Operations** | Encrypted and decrypted data files |
+| **Security Awareness** | Learned about secure key management |
 
 ---
 
-## Why Inspector Matters for Cloud Practitioner Exam
+## Real-World Application for SOC
 
-**Exam Topics Covered:**
+As a SOC analyst, understanding encryption services like AWS KMS helps me:
 
-| Exam Domain | What I Learned |
-|-------------|----------------|
-| Security Services | Inspector for vulnerability management |
-| Threat Detection | Automated CVE scanning for AWS resources |
-| Compliance | Continuous monitoring for security gaps |
-| Remediation | Finding and fixing vulnerable dependencies |
-
-**Inspector Facts to Memorise for Exam:**
-
-| Fact | Value |
-|------|-------|
-| What Inspector scans | EC2, ECR, Lambda |
-| Free trial duration | 15 days |
-| Finding severity levels | Critical, High, Medium, Low |
-| Integration with | Security Hub, EventBridge, CloudWatch |
-| Primary purpose | Vulnerability management |
+| Skill | Application |
+|-------|-------------|
+| **Investigate Security Incidents** | Understand which keys protect sensitive data |
+| **Audit Access** | Review KMS key usage and permissions |
+| **Detect Misconfigurations** | Identify over-permissive key policies |
+| **Respond to Incidents** | Understand encryption controls during an investigation |
 
 ---
 
-## Common Errors and Solutions
+## Security Best Practices
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| No findings appearing | Inspector not activated | Activate Inspector for the account |
-| Lambda not scanned | Runtime not supported | Only Python, Node.js, Java, .NET are supported |
-| False positives | Outdated CVE database | Review finding details, suppress if not applicable |
-| Cannot activate | Missing IAM permissions | Ensure admin access or required permissions |
-
----
-
-## Cost Analysis
-
-**Inspector Pricing (us-west-2):**
-
-| Resource | Price |
-|----------|-------|
-| EC2 instance scanning | $0.006 per instance hour |
-| Container image scanning | $0.002 per image scan |
-| Lambda function scanning | $0.003 per function scan |
-
-**Free Trial:**
-- 15 days free for all scanning types
-- No cost during free trial period
-
-**My Lab Cost:**
-- 2 Lambda functions scanned
-- Within free trial period
-- Total cost: $0.00
+| Practice | Why It Matters |
+|----------|----------------|
+| **Use Customer Managed Keys** | Complete control over key rotation and policies |
+| **Enable Key Rotation** | Reduce impact of key compromise |
+| **Least Privilege Access** | Only grant necessary KMS permissions |
+| **Monitor Key Usage** | Detect unauthorized encryption/decryption attempts |
+| **Use Key Aliases** | Simplify key identification |
+| **Store Credentials Securely** | Never hardcode access keys in code |
 
 ---
 
-## Next Learning Goals
+## Commands Used
 
-| Topic | Why It's Important |
-|-------|---------------------|
-| Security Hub | Centralise findings from multiple security services |
-| GuardDuty | Threat detection for AWS accounts |
-| Systems Manager Patch Manager | Automate OS patching for EC2 |
-| AWS Config | Resource compliance and configuration monitoring |
-| CVE Database Research | Understand vulnerability disclosure process |
+```bash
+# Configure AWS CLI
+aws configure
+aws configure set session_token [TOKEN]
 
----
+# Install AWS Encryption SDK
+pip3 install aws-encryption-sdk-cli
 
-## Resources Used
+# Encrypt file
+aws-encryption-cli --encrypt --input [file] --output [file.encrypted] --wrapping-keys key-id=MyKMSKey
 
-- AWS Free Tier account (us-west-2 / Oregon)
-- Amazon Inspector console
-- Lambda function `get-request`
-- `requests` Python package version 2.20.0
-- CVE databases
+# Decrypt file
+aws-encryption-cli --decrypt --input [file.encrypted] --output [file.decrypted] --wrapping-keys key-id=MyKMSKey
 
----
+# View KMS keys
+aws kms list-keys
 
-## Final Reflection
+# Get key details
+aws kms describe-key --key-id MyKMSKey
 
-This lab transformed my understanding of vulnerability management in AWS. I learned that:
-
-**Vulnerability scanning is automated** – Inspector continuously scans resources without manual intervention. This is critical for maintaining security at scale.
-
-**Dependencies are attack vectors** – The `requests` library vulnerability shows that even popular, well-maintained packages can have security flaws. Every dependency is a potential risk.
-
-**Remediation is straightforward** – Updating a package version and redeploying the Lambda function fixed all CVEs. Inspector confirmed the fix automatically.
-
-**Security is a shared responsibility** – AWS provides the scanning service (Inspector), but I am responsible for acting on the findings and updating my code.
-
-**Finding severity matters** – Medium severity vulnerabilities should be addressed, but Critical findings require immediate action. Prioritisation is key.
+# List aliases
+aws kms list-aliases
+```
 
 ---
 
-## Lab Status: ✅ COMPLETED
+## Resources
 
-**Date:** June 8, 2026
-
-**Environment:** AWS us-west-2 (Oregon)
-
-**Account ID:** 4835-3367-4646
-
-**Lambda Functions Scanned:** 2
-
-**Findings Identified:** 5+ CVEs
-
-**Findings Resolved:** All closed
-
-**Vulnerable Package:** requests==2.20.0
-
-**Fixed Package:** requests>=2.32.0
+| Resource | Link |
+|----------|------|
+| AWS KMS Documentation | [docs.aws.amazon.com/kms](https://docs.aws.amazon.com/kms) |
+| AWS Encryption SDK | [docs.aws.amazon.com/encryption-sdk](https://docs.aws.amazon.com/encryption-sdk) |
+| AWS CLI Reference | [docs.aws.amazon.com/cli](https://docs.aws.amazon.com/cli) |
 
 ---
 
-**Lab completed as part of AWS re/Start programme under Praesignis.**
+## Connect With Me
+
+- **GitHub:** github.com/owen23-ux
+- **LinkedIn:** linkedin.com/in/owen-maake-0b715a3a3
+- **Email:** owenlethabo28@gmail.com
+
+---
+
+**License:** MIT
+```
