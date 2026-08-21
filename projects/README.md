@@ -1,5 +1,27 @@
 # Projects
 
+End-to-end AWS projects demonstrating practical cloud skills.
+
+---
+
+## Harvest Table Restaurant – Static Website
+
+- **Description:** A fully functional static website for a local restaurant to enable online booking, meal ordering, and admin management. The project replaces a manual, paper-based system with a cloud-native solution hosted on Amazon S3.
+- **Services Used:** Amazon S3 (hosting), HTML5, CSS3, JavaScript
+- **Key Features:**
+  - Online booking and ordering system
+  - Admin dashboard for managing bookings and orders
+  - Proposed integration with AWS Cognito, DynamoDB, Lambda, and SNS
+- **Link:** [View Project](./Static-Website/)
+
+---
+
+## More Projects Coming Soon
+
+- Wazuh SIEM Lab – Building a home-based SIEM for threat detection and log analysis
+- Serverless Application – AWS Lambda + API Gateway + DynamoDB
+- Cloud Security Monitoring – CloudWatch + GuardDuty + SNS alerts# Projects
+
 ## Overview
 
 This repository showcases two projects completed during my AWS re/Start journey. Both projects demonstrate hands-on AWS skills, from static website hosting to conversational AI, with a focus on solving real-world problems using cloud technologies.
