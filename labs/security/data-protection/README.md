@@ -1,4 +1,4 @@
-# AWS KMS & Encryption CLI Lab - Data Protection
+# Data Protection
 
 ## Lab Overview
 
