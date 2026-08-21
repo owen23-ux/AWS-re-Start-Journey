@@ -21,14 +21,14 @@ Here you will find:
 
 ## Table of Contents
 
-- Getting Started
-- What I'm Learning
-- Repository Structure
-- Labs
-- Projects
-- Certifications and Badges
-- Goals
-- Connect
+- [Getting Started](#getting-started)
+- [What I'm Learning](#what-im-learning)
+- [Repository Structure](#repository-structure)
+- [Labs](#labs)
+- [Projects](#projects)
+- [Certifications and Badges](#certifications-and-badges)
+- [Goals](#goals)
+- [Connect](#connect)
 
 ---
 
@@ -58,25 +58,28 @@ New to cloud computing? Start here:
 ---
 
 ## Repository Structure
+
+```
 AWS-re-Start-Journey/
 │
 ├── Labs/
-│ ├── Compute/
-│ ├── Databases/
-│ ├── Linux/
-│ ├── Networking/
-│ ├── Python/
-│ ├── Security/
-│ └── README.md
+│   ├── Compute/
+│   ├── Databases/
+│   ├── Linux/
+│   ├── Networking/
+│   ├── Python/
+│   ├── Security/
+│   └── README.md
 │
 ├── Projects/
-│ ├── Static-Website/
-│ └── README.md
+│   ├── Static-Website/
+│   └── README.md
 │
 ├── certs-badges/
-│ └── README.md
+│   └── README.md
 │
 └── README.md
+```
 
 ---
 
@@ -84,9 +87,43 @@ AWS-re-Start-Journey/
 
 Hands-on lab exercises completed throughout the AWS re/Start curriculum.
 
-The `Labs/` folder is organized by topic so each exercise is easy to browse, review, and present. Lab areas include compute, networking, Linux, Python, databases, and security.
+### Compute
+- **EC2 Basics:** Launching, connecting, and securing virtual servers
+- **Auto Scaling:** Implementing automatic scaling policies
+- **Elastic Load Balancing:** Distributing traffic across multiple instances
 
-[Open Labs](./labs/)
+### Networking
+- **VPC Design:** Creating isolated networks with public and private subnets
+- **Security Groups & NACLs:** Understanding stateful vs. stateless firewalls
+- **Route Tables:** Configuring traffic routing between subnets and the internet
+
+### Security
+- **IAM:** Managing users, groups, roles, and policies
+- **CloudTrail:** Auditing and logging API activity
+- **GuardDuty:** Threat detection and monitoring
+- **Inspector:** Vulnerability scanning for EC2 instances
+
+### Databases
+- **RDS:** Deploying and managing relational databases
+- **DynamoDB:** Working with NoSQL databases
+- **SQL Queries:** Basic SELECT, INSERT, and JOIN operations
+
+### Linux
+- **Command Line:** Navigation, file management, and user permissions
+- **Scripting:** Basic bash scripting for automation
+- **System Administration:** Process management and system monitoring
+
+### Python
+- **Fundamentals:** Syntax, functions, and data structures
+- **Automation:** Simple scripts for cloud tasks
+- **Boto3:** Interacting with AWS services using Python
+
+### Monitoring & Operations
+- **CloudWatch:** Creating alarms and monitoring metrics
+- **Systems Manager:** Managing EC2 instances remotely
+- **AWS Config:** Tracking resource configurations for compliance
+
+[Open Labs Folder](./labs/)
 
 ---
 
@@ -94,9 +131,23 @@ The `Labs/` folder is organized by topic so each exercise is easy to browse, rev
 
 End-to-end AWS projects demonstrating practical cloud skills.
 
-These projects go beyond individual labs, combining multiple AWS services to solve real-world scenarios and showcase what I have built during the programme.
+### Harvest Table Restaurant – Static Website
 
-[Open Projects](./projects/)
+- **Description:** A fully functional static website for a local restaurant to enable online booking, meal ordering, and admin management. The project replaces a manual, paper-based system with a cloud-native solution hosted on Amazon S3.
+- **Services Used:** Amazon S3 (hosting), HTML5, CSS3, JavaScript
+- **Key Features:**
+  - Online booking and ordering system
+  - Admin dashboard for managing bookings and orders
+  - Proposed integration with AWS Cognito, DynamoDB, Lambda, and SNS
+- **Link:** [View Project](./projects/Static-Website/)
+
+### More Projects Coming Soon
+
+- Wazuh SIEM Lab – Building a home-based SIEM for threat detection and log analysis
+- Serverless Application – AWS Lambda + API Gateway + DynamoDB
+- Cloud Security Monitoring – CloudWatch + GuardDuty + SNS alerts
+
+[Open Projects Folder](./projects/)
 
 ---
 
@@ -104,7 +155,34 @@ These projects go beyond individual labs, combining multiple AWS services to sol
 
 A record of certifications, digital badges, and completion milestones earned throughout the AWS re/Start Programme.
 
-[Open Certifications and Badges](./certs-badges/)
+### Certifications
+
+| Certification | Status | Date |
+|---------------|--------|------|
+| AWS re/Start Graduate | ✅ Completed | July 2026 |
+| Microsoft Azure Fundamentals (AZ-900) | ✅ Completed | 2026 |
+| AWS AI Practitioner | ✅ Completed | 2026 |
+| Cisco Introduction to Cybersecurity | ✅ Completed | 2026 |
+| ISC2 Certified in Cybersecurity (CC) | ✅ Completed | 2026 |
+| AWS Cloud Practitioner | 📚 Studying | In Progress |
+| CompTIA Security+ | 📅 Planned | Upcoming |
+| Microsoft SC-200 | 📅 Planned | Upcoming |
+
+### Digital Badges
+
+- AWS re/Start Graduate
+- Microsoft Azure Fundamentals
+
+### Simulearns Completed
+
+| Simulearn | Status | Date |
+|-----------|--------|------|
+| Cloud Foundations | ✅ Completed | May 2026 |
+| File Systems in the Cloud | ✅ Completed | May 2026 |
+| Networking Concepts | ✅ Completed | June 2026 |
+| Core Security Concepts (IAM) | ✅ Completed | June 2026 |
+
+[Open Certifications and Badges Folder](./certs-badges/)
 
 ---
 
@@ -134,3 +212,6 @@ If you are on a similar path or want to connect, feel free to reach out.
 - **GitHub:** github.com/owen23-ux
 - **LinkedIn:** linkedin.com/in/owen-maake-0b715a3a3
 - **Email:** owenlethabo28@gmail.com
+```
+
+---
