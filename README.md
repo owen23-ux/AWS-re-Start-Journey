@@ -58,3 +58,79 @@ New to cloud computing? Start here:
 ---
 
 ## Repository Structure
+AWS-re-Start-Journey/
+│
+├── Labs/
+│ ├── Compute/
+│ ├── Databases/
+│ ├── Linux/
+│ ├── Networking/
+│ ├── Python/
+│ ├── Security/
+│ └── README.md
+│
+├── Projects/
+│ ├── Static-Website/
+│ └── README.md
+│
+├── certs-badges/
+│ └── README.md
+│
+└── README.md
+
+---
+
+## Labs
+
+Hands-on lab exercises completed throughout the AWS re/Start curriculum.
+
+The `Labs/` folder is organized by topic so each exercise is easy to browse, review, and present. Lab areas include compute, networking, Linux, Python, databases, and security.
+
+[Open Labs](./labs/)
+
+---
+
+## Projects
+
+End-to-end AWS projects demonstrating practical cloud skills.
+
+These projects go beyond individual labs, combining multiple AWS services to solve real-world scenarios and showcase what I have built during the programme.
+
+[Open Projects](./projects/)
+
+---
+
+## Certifications and Badges
+
+A record of certifications, digital badges, and completion milestones earned throughout the AWS re/Start Programme.
+
+[Open Certifications and Badges](./certs-badges/)
+
+---
+
+## Goals
+
+- [x] Enrol in AWS re/Start Programme
+- [x] Begin building foundational cloud skills
+- [x] Complete all core curriculum labs
+- [x] Build end-to-end cloud projects
+- [ ] Earn AWS Certification
+- [ ] Land an entry-level cloud, infrastructure, or technical support role
+
+---
+
+## Connect
+
+This portfolio is a living repository and will continue to grow as I complete more labs, projects, and milestones.
+
+If you are on a similar path or want to connect, feel free to reach out.
+
+**Keep building. Keep learning.**
+
+---
+
+## Connect With Me
+
+- **GitHub:** github.com/owen23-ux
+- **LinkedIn:** linkedin.com/in/owen-maake-0b715a3a3
+- **Email:** owenlethabo28@gmail.com
