@@ -1,10 +1,16 @@
 # Challenge Lab: Query the World Database
 
+**Date Completed:** _add date_
+
+**Service:** Amazon RDS / MariaDB
+
+**Database:** world (pre-populated with country, city, and countrylanguage tables)
+
+---
+
 ## Lab Overview
 
 This lab reinforced SQL querying skills using a pre-configured MariaDB database called `world`. I connected to a Command Host instance and ran various SELECT statements to extract meaningful information from the `country`, `city`, and `countrylanguage` tables.
-
-**Database:** MariaDB (world database)
 
 ---
 
@@ -71,12 +77,12 @@ SHOW DATABASES;
 **Output:**
 ```
 +--------------------+
-| Database           |
+| Database |
 +--------------------+
 | information_schema |
-| mysql              |
+| mysql |
 | performance_schema |
-| world              |
+| world |
 +--------------------+
 ```
 
@@ -268,12 +274,8 @@ WHERE LOWER(Region) LIKE "%central%";
 
 ---
 
-## Lab Status: ✅ COMPLETED
+## Lab Status
 
-**Database:** MariaDB (world database)
-
-**Tables Used:** country, city, countrylanguage
-
-**Environment:** AWS Lab VPC
+Completed. Tables used: country, city, countrylanguage. Environment: AWS Lab VPC.
 
 ---
