@@ -1,4 +1,6 @@
-# 🔍 Amazon Inspector: Vulnerability Management in the Cloud
+# Amazon Inspector: Vulnerability Management in the Cloud
+
+**Date Completed:** _add date_
 
 **Time Spent:** 1 hour
 
@@ -254,7 +256,7 @@ I learned how to track finding remediation.
 **Finding Status Flow:**
 
 ```
-Active → In Progress → Closed
+Active  In Progress  Closed
    │
    └── Suppressed (false positive or accepted risk)
 ```
@@ -545,7 +547,7 @@ This lab transformed my understanding of vulnerability management in AWS. I lear
 
 ---
 
-## Lab Status: ✅ COMPLETED
+## Lab Status:  COMPLETED
 
 **Environment:** AWS us-west-2 (Oregon)
 
