@@ -165,14 +165,15 @@ A record of certifications, digital badges, and completion milestones earned thr
 
 | Certification | Status | Date |
 |---------------|--------|------|
-| AWS re/Start Graduate | ✅ Completed | July 2026 |
-| Microsoft Azure Fundamentals (AZ-900) | ✅ Completed | 2026 |
-| AWS AI Practitioner | ✅ Completed | 2026 |
-| Cisco Introduction to Cybersecurity | ✅ Completed | 2026 |
-| ISC2 Certified in Cybersecurity (CC) | ✅ Completed | 2026 |
-| AWS Cloud Practitioner | 📚 Studying | In Progress |
-| CompTIA Security+ | 📅 Planned | Upcoming |
-| Microsoft SC-200 | 📅 Planned | Upcoming |
+| AWS re/Start Graduate |  Completed | July 2026 |
+| Microsoft Azure Fundamentals (AZ-900) |  Completed | 2026 |
+| AWS AI Practitioner |  Completed | 2026 |
+| Cisco Introduction to Cybersecurity |  Completed | 2026 |
+| ISC2 Certified in Cybersecurity (CC) |  Completed | 2026 |
+| AWS Cloud Practitioner |  Studying | In Progress |
+| Microsoft SC-900 |  Planned | Upcoming |
+| CompTIA Security+ |  Planned | Upcoming |
+| Microsoft SC-200 |  Planned | Upcoming |
 
 ### Digital Badges
 
@@ -183,10 +184,10 @@ A record of certifications, digital badges, and completion milestones earned thr
 
 | Simulearn | Status | Date |
 |-----------|--------|------|
-| Cloud Foundations | ✅ Completed | May 2026 |
-| File Systems in the Cloud | ✅ Completed | May 2026 |
-| Networking Concepts | ✅ Completed | June 2026 |
-| Core Security Concepts (IAM) | ✅ Completed | June 2026 |
+| Cloud Foundations |  Completed | May 2026 |
+| File Systems in the Cloud |  Completed | May 2026 |
+| Networking Concepts |  Completed | June 2026 |
+| Core Security Concepts (IAM) |  Completed | June 2026 |
 
 [Open Certifications and Badges Folder](./certs-badges/)
 
