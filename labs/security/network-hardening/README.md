@@ -1,7 +1,5 @@
 # 🔍 Amazon Inspector: Vulnerability Management in the Cloud
 
-**Date Completed:** June 8, 2026
-
 **Time Spent:** 1 hour
 
 **Service:** Amazon Inspector (Vulnerability Management Service)
@@ -549,8 +547,6 @@ This lab transformed my understanding of vulnerability management in AWS. I lear
 
 ## Lab Status: ✅ COMPLETED
 
-**Date:** June 8, 2026
-
 **Environment:** AWS us-west-2 (Oregon)
 
 **Account ID:** 4835-3367-4646
@@ -566,5 +562,3 @@ This lab transformed my understanding of vulnerability management in AWS. I lear
 **Fixed Package:** requests>=2.32.0
 
 ---
-
-**Lab completed as part of AWS re/Start programme under Praesignis.**
