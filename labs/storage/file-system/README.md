@@ -1,4 +1,4 @@
-# 📁 AWS EFS: Elastic File System Deep Dive
+# AWS EFS: Elastic File System Deep Dive
 
 **Date Completed**: May 20, 2026  
 **Time Spent**: 45 minutes  
@@ -206,8 +206,8 @@ I learned how to add mount targets across multiple Availability Zones.
 
 **Why Multiple Mount Targets Are Important:**
 
-- EC2 in us-east-1a → Mounts to us-east-1a endpoint → Low latency, no cross-AZ cost
-- EC2 in us-east-1b → Mounts to us-east-1b endpoint → Low latency, no cross-AZ cost
+- EC2 in us-east-1a  Mounts to us-east-1a endpoint  Low latency, no cross-AZ cost
+- EC2 in us-east-1b  Mounts to us-east-1b endpoint  Low latency, no cross-AZ cost
 
 **What I Learned:**
 
@@ -352,7 +352,7 @@ data
 
 **Best Practice:** Use descriptive names like:
 - `/var/www/html` for web content
-- `/shared` for general📁 AWS EFS: Elastic File System Deep Dive
+- `/shared` for general AWS EFS: Elastic File System Deep Dive
 
 Date Completed: May 20, 2026
 Time Spent: 45 minutes
@@ -544,9 +544,9 @@ Security groups	PetModels-EFS-1-SG
 
 Why Multiple Mount Targets Are Important:
 
-    EC2 in us-east-1a → Mounts to us-east-1a endpoint → Low latency, no cross-AZ cost
+    EC2 in us-east-1a  Mounts to us-east-1a endpoint  Low latency, no cross-AZ cost
 
-    EC2 in us-east-1b → Mounts to us-east-1b endpoint → Low latency, no cross-AZ cost
+    EC2 in us-east-1b  Mounts to us-east-1b endpoint  Low latency, no cross-AZ cost
 
 What I Learned:
 
